@@ -1,0 +1,46 @@
+
+        .holder
+        {
+            margin: 15px 0;
+        }
+        .holder a
+        {
+            font-size: 15px;
+            cursor: pointer;
+            margin: 0 5px;
+            color: #333;
+        }
+        .holder a:hover
+        {
+            background-color: #222;
+            color: #fff;
+        }
+        .jp-previous
+        {
+            background: url(../images/left_pagination.png) no-repeat center center #444;   height: 30px; padding: 26px; width: 30px; margin-right:15px;
+
+        }
+       .jp-next
+        {
+            background: url(../images/right_pagination.png) no-repeat center center #444;  height: 30px; padding:26px; width: 30px; margin-left: 15px;
+
+        }
+        .holder a.jp-current, a.jp-current:hover
+        {
+            color: #FF4242;
+            font-weight: bold;
+        }
+        .holder a.jp-disabled, a.jp-disabled:hover
+        {
+            color: #bbb;
+        }
+        .holder a.jp-current, a.jp-current:hover, .holder a.jp-disabled, a.jp-disabled:hover
+        {
+            cursor: default;
+            background: none;
+        }
+        .holder span
+        {
+            margin: 0 5px;
+        }
+

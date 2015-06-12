@@ -1,0 +1,215 @@
+﻿
+<!-- Region 3 Wrap -->
+
+<div class="container region3wrap">
+
+
+    <!-- Content Top -->
+    <div class="row content_top">
+
+        <div class="nine columns">
+
+            <ul class="breadcrumbs">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">Pages</a></li>
+                <li class="current"><a href="#">Blog</a></li>
+            </ul>
+
+        </div>
+
+        <div class="three columns">
+
+            <div class="row">
+                <div class="twelve columns">
+                    <div class="row collapse top_search">
+                        <div class="ten mobile-three columns">
+                            <input type="text" placeholder="Enter search terms" />
+                        </div>
+                        <div class="two mobile-one columns">
+                            <a href="#" class="button icon-search"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- End Content Top -->
+
+</div>
+
+<!-- End Region 3 Wrap -->
+<!-- Region 4 Wrap -->
+
+<div class="container region4wrap">
+
+    <div class="row maincontent">
+
+        <div class="twelve columns">
+
+            <div class="page_title">
+
+                <div class="row">
+
+                    <div class="four columns">
+                        <h1>Portfolio</h1>
+                    </div>
+
+                    <div class="eight columns">
+
+                        <!-- Portfolio Navigation -->
+                        <section id="options">
+
+                            <ul id="filters" class="option-set right" data-option-key="filter">
+                                <li><a href="#filter" data-option-value="*" class="button small selected">Show All</a></li>
+                                <li><a href="#filter" data-option-value=".web" class="button small">Web Design</a></li>
+                                <li><a href="#filter" data-option-value=".ill" class="button small">Illustration</a></li>
+                                <li><a href="#filter" data-option-value=".logo" class="button small">Logo</a></li>
+                                <li><a href="#filter" data-option-value=".video" class="button small">Video</a></li>
+                                <li><a href="#filter" data-option-value=".print" class="button small">Print</a></li>
+                            </ul>
+
+                        </section>
+                        <!-- End Portfolio Navigation -->
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Portfolio Content -->
+        <div class="twelve columns">
+
+            <div class="row">
+
+                <!-- Portfolio Content -->
+                <div class="twelve columns">
+
+                    <div class="row">
+
+                        <div id="container" class="clickable variable-sizes clearfix">
+                            @{
+                                foreach (var i in ViewBag.albums)
+                                {
+                                                                <!-- Portfolio Item -->
+                                    <div class="six columns element web logo print">
+
+                                        <div class="portfolio-item">
+
+                                            <div class="portfolio-item-image image-overlay">
+                                                <a data-titan-group="gallery" href="/Photo/Album/@i.PhotoAlbumId" title="@i.Title">
+                                                    <img src="@i.PhotoAlbumItems[0].Photo.Location" alt="" />
+                                                    <span class="overlay-icon item-zoom"></span>
+                                                </a>
+                                            </div>
+
+                                            <div class="portfolio-item-content">
+                                                <h5 class="title"><a href="/Photo/Album/@i.PhotoAlbumId">@i.Title</a></h5>
+                                                @*<p>Illustration  / Web Design </p>*@
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                            <!-- End Portfolio Item -->
+                                }
+                            }
+
+                         
+                        
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- End Portfolio Content -->
+
+            </div>
+
+        </div>
+        <!-- End Portfolio Content -->
+
+    </div>
+
+</div>
+
+<!-- End Region 4 Wrap -->
+<script>
+    $('.titan-lb').lightbox({
+        'scrolling': 'auto',
+        theme: 'default'
+    });
+    prettyPrint();
+    </script>
+<script>
+    $(".image-overlay .overlay-icon").fadeTo("fast", 0); // This sets the opacity of the thumbs to fade down to 60% when the page loads
+
+    $(".image-overlay .overlay-icon").hover(function () {
+        $(this).fadeTo("fast", 0.8); // This should set the opacity to 100% on hover
+    }, function () {
+        $(this).fadeTo("fast", 0); // This should set the opacity back to 60% on mouseout
+    });
+
+ 
+
+    var $container = $('#container');
+
+    $container.isotope({
+        itemSelector: '.element',
+        // disable resizing
+        resizable: false,
+        // set columnWidth to a percentage of container width
+        masonry: {
+            columnWidth: $container.width() / 12
+        },
+    });
+
+    // update columnWidth on window resize
+    $(window).smartresize(function () {
+        $container.isotope({
+            // set columnWidth to a percentage of container width
+            masonry: {
+                columnWidth: $container.width() / 12
+            }
+        });
+    });
+
+
+    var $optionSets = $('#options .option-set'),
+        $optionLinks = $optionSets.find('a');
+
+    $optionLinks.click(function () {
+        var $this = $(this);
+        // don't proceed if already selected
+        if ($this.hasClass('selected')) {
+            return false;
+        }
+        var $optionSet = $this.parents('.option-set');
+        $optionSet.find('.selected').removeClass('selected');
+        $this.addClass('selected');
+
+        // make option object dynamically, i.e. { filter: '.my-filter-class' }
+        var options = {},
+            key = $optionSet.attr('data-option-key'),
+            value = $this.attr('data-option-value');
+        // parse 'false' as false boolean
+        value = value === 'false' ? false : value;
+        options[key] = value;
+        if (key === 'layoutMode' && typeof changeLayoutMode === 'function') {
+            // changes in layout modes need extra logic
+            changeLayoutMode($this, options)
+        } else {
+            // otherwise, apply new options
+            $container.isotope(options);
+        }
+
+        return false;
+    });
+
+
+</script>

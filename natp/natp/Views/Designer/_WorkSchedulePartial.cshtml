@@ -1,0 +1,140 @@
+﻿@model natp.Models.WorkScheduleModel
+
+<div class="row">
+
+    <div class="twelve columns">
+        <h3>Current Schedule</h3>
+
+        <div class="row">
+            <div class="four columns">
+                <ul class="toggle-view">
+
+                    <li>
+                        <h2>Sunday</h2><span><i class="icon-plus"></i></span>
+                        <div class="toggle-content">
+                            <ul class="type2">
+                                @{
+                                    foreach (var w in Model.sun)
+                                    {
+                                        @Html.Raw("<li><p> " + w + "</p></li>");
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="four columns">
+                <ul class="toggle-view">
+
+                    <li>
+                        <h2>Monday</h2><span><i class="icon-plus"></i></span>
+                        <div class="toggle-content">
+                            <ul class="type2">
+                                @{
+                                    foreach (var w in Model.mon)
+                                    {
+                                        @Html.Raw("<li><p> " + w + "</p></li>");
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="four columns">
+                <ul class="toggle-view">
+
+                    <li>
+                        <h2>Tuesday</h2><span><i class="icon-plus"></i></span>
+                        <div class="toggle-content">
+                            <ul class="type2">
+                                @{
+                                    foreach (var w in Model.tue)
+                                    {
+                                        @Html.Raw("<li><p> " + w + "</p></li>");
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="four columns">
+                <ul class="toggle-view">
+
+                    <li>
+                        <h2>Wednesday</h2><span><i class="icon-plus"></i></span>
+                        <div class="toggle-content">
+                            <ul class="type2">
+                                @{
+                                    foreach (var w in Model.wed)
+                                    {
+                                        @Html.Raw("<li><p> " + w + "</p></li>");
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="four columns">
+                <ul class="toggle-view">
+
+                    <li>
+                        <h2>Thursday</h2><span><i class="icon-plus"></i></span>
+                        <div class="toggle-content">
+                            <ul class="type2">
+                                @{
+                                    foreach (var w in Model.thu)
+                                    {
+                                        @Html.Raw("<li><p>" + w + "</p></li>");
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="four columns">
+                <ul class="toggle-view">
+
+                    <li>
+                        <h2>Friday</h2><span><i class="icon-plus"></i></span>
+                        <div class="toggle-content">
+                            <ul class="type2">
+                                @{
+                                    foreach (var w in Model.fri)
+                                    {
+                                        @Html.Raw("<li><p> " + w + "</p></li>");
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="four columns">
+                <ul class="toggle-view">
+
+                    <li>
+                        <h2>Saturday</h2><span><i class="icon-plus"></i></span>
+                        <div class="toggle-content">
+                            <ul class="type2">
+                                @{
+                                    foreach (var w in Model.sat)
+                                    {
+                                        @Html.Raw("<li><p> " + w + "</p></li>");
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

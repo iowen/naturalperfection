@@ -1,0 +1,48 @@
+﻿@using natp.Models
+@model AppointmentCommentFormViewModel
+           <script>
+    function submitComment() {
+        var appointmentId = $("#AppointmentId").val();
+        var accountId = $("#AccountId").val();
+        var text = $("#Text").val();
+
+        var antiForg = $("input[name='__RequestVerificationToken']").val();
+
+        var $form = $("#commentForm");
+        if($form.valid()) {
+            //Ajax call here
+            $.post('@Url.Action("MakeComment", "Appointment", new { })', { __RequestVerificationToken: antiForg, AccountId: accountId, AppointmentId: appointmentId, Text: text}, function (data, status) {
+            if( data.Status == "Success")
+            {
+                $("#Text").val("");
+                reloadComments(@Html.Raw(Model.AppointmentId));
+            }
+            });
+            }
+            }
+            </script>
+@if(Model.CanComment)
+                {
+            using (Html.BeginForm("MakeComment", "Appointment", FormMethod.Post, new { @class = "form-horizontal", role = "form", onsubmit = "submitComment();return false;" ,id="commentForm" }))
+            {
+                @Html.AntiForgeryToken()
+    <h3>Leave a Comment</h3>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    
+ 
+
+        <div class="row">
+            <input type="hidden" name="AppointmentId" id="AppointmentId" value="@Html.Raw(Model.AppointmentId)" />
+            <input type="hidden" name="AccountId" id="AccountId" value="@Html.Raw(Model.AccountId)" />
+
+            <div class="twelve columns">
+                <label>Message<span> (required)</span></label>
+                @Html.TextAreaFor(m => m.Text, new { @class = "form-control" })
+            </div>
+        </div>
+        <input type="submit" value="Submit" class="medium button" />
+        
+            }
+}
+       

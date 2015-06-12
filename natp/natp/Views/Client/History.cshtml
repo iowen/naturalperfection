@@ -1,0 +1,168 @@
+﻿<!-- Region 3 Wrap -->
+
+<div class="container region3wrap">
+
+
+    <!-- Content Top -->
+    <div class="row content_top">
+
+        <div class="nine columns">
+
+            <ul class="breadcrumbs">
+                <li><a href="@Request.Url.GetLeftPart(UriPartial.Authority)">Home</a></li>
+                <li><a href="@Request.Url.GetLeftPart(UriPartial.Authority)/Account">Profile</a></li>
+                <li class="current"><a href="javascript:void(0)">Appointment History</a></li>
+            </ul>
+
+        </div>
+
+        <div class="three columns">
+
+            <div class="row">
+                <div class="twelve columns">
+                    <div class="row collapse top_search">
+                        <div class="ten mobile-three columns">
+                            <input type="text" placeholder="Enter search terms" />
+                        </div>
+                        <div class="two mobile-one columns">
+                            <a href="#" class="button icon-search"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- End Content Top -->
+
+</div>
+
+<!-- End Region 3 Wrap -->
+<!-- Region 4 Wrap -->
+
+<div class="container region4wrap">
+
+    <div class="row maincontent">
+
+        <div class="twelve columns">
+
+            <div class="page_title">
+
+                <div class="row">
+
+                    <div class="twelve columns">
+                        <h1>Appointments</h1>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="twelve columns">
+            <h3>Upcoming</h3>
+            <div class="row services">
+
+
+                <table id="example" class="display" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Status</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            foreach (var a in ViewBag.upcomingAppointments)
+                            {
+                                <tr>
+                                    <td>@a.AppointmentTimeUtc.ToLocalTime().ToString("MMMM dd, yyyy h:mm tt")</td>
+                                    <td>status</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                <script type="text/javascript" language="javascript">
+
+
+
+                    $('#example').dataTable({
+                        columnDefs: [{
+                            targets: [0],
+                            orderData: [0, 1]
+                        }, {
+                            targets: [1],
+                            orderData: [1, 0]
+                        }]
+                    });
+
+
+                </script>
+
+
+
+            </div>
+
+        </div>
+
+        <div class="twelve columns">
+            <h3>Past</h3>
+            <div class="row services">
+
+
+                <table id="example2" class="display" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Status</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            foreach (var a in ViewBag.pastAppointments)
+                            {
+                                <tr>
+                                    <td>@a.AppointmentTimeUtc.ToLocalTime().ToString("MMMM dd, yyyy h:mm tt")</td>
+                                    <td>status2</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                <script type="text/javascript" language="javascript">
+
+
+
+                    $('#example2').dataTable({
+                        columnDefs: [{
+                            targets: [0],
+                            orderData: [0, 1]
+                        }, {
+                            targets: [1],
+                            orderData: [1, 0]
+                        }]
+                    });
+
+
+                </script>
+
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+<!-- End Region 4 Wrap -->
+

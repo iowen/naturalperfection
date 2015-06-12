@@ -1,0 +1,207 @@
+﻿
+<script>
+    var disabledDays = [@{
+        foreach(var d in ViewBag.closedDates)
+    {
+        <text>"@d.ToString("M-d-yyyy")",</text>
+    }
+    }];
+    /* utility functions */
+    function nationalDays(date) {
+
+        var m = date.getMonth(), d = date.getDate(), y = date.getFullYear();
+        var currentdate = (m + 1) + '-' + d + '-' + y;
+        var returnVal = [true];
+        //console.log('Checking (raw): ' + m + '-' + d + '-' + y);
+        for (i = 0; i < disabledDays.length; i++) {
+            if ($.inArray(String(currentdate), disabledDays) != -1) {
+           //     alert('bad:  ' + (m+1) + '-' + d + '-' + y + ' / ' + disabledDays[i]);
+                returnVal = [false];
+            }
+        }
+        //alert('good:  ' + (m+1) + '-' + d + '-' + y);
+        return returnVal;
+    }
+    function noHolidays(date) {
+      var day = date.getDay();
+        //alert(nationalDays(date));
+      return day != 0 && day != 1 && nationalDays(date);
+    }
+    function setAppointment(clientId,designerId,time,offset)
+    {
+        alert(clientId);
+        //Ajax call here
+        $.post('@Url.Action("SetAppointment", "Appointment", new { })', {ClientId: clientId, DesignerId: designerId, Time: time, Offset: offset}, function (data, status) {
+            if( data.Status == "Success")
+            {
+                window.location.href = '@Url.Action("Index", "Home", new { })';            }
+        });    
+    }
+
+    function GetAvailableTimes()
+    {
+        $("#timesDiv").hide();
+        var date = $("#datepicker").datepicker('getDate');
+        $("#apDate").html($("#datepicker").val());
+      //  alert(date);
+        var m = date.getMonth(), d = date.getDate(), y = date.getFullYear();
+        var currentdate = (m + 1) + '-' + d + '-' + y;
+        var designerId = @ViewBag.client.DesignerId;
+        var clientId = @ViewBag.client.ClientId;
+        var timeOffset = moment().utcOffset()/60.0;
+      //  alert(designerId);
+        $.get('@Request.Url.GetLeftPart(UriPartial.Authority)/Appointment/GetTimes?dId=' + designerId+'&date='+currentdate+'&offset='+timeOffset, function(data) {
+            var re = /-?\d+/;
+            var outputM = "";
+            var outputA = "";
+            var outputE = "";
+
+            for (var i = 0; i < data.Times.length; i++)
+            {
+                var millisecs = re.exec(data.Times[i]);
+                if(moment(parseInt(millisecs[0])).hour() < 12)
+                {
+                    outputM += "<li><a href='javascript:void(0)' onclick='setAppointment(\""+ clientId+"\",\""+ designerId+"\",\""+moment(parseInt(millisecs[0])).format("YYYY/MM/DD h:mm:ss a")+"\",\""+timeOffset+"\");'>"+moment(parseInt(millisecs[0])).format("h:mm:ss a");+"</a></li>";
+                }else if(moment(parseInt(millisecs[0])).hour() < 16)
+                {
+                    outputA += "<li><a href='javascript:void(0)' onclick='setAppointment(\""+ clientId+"\",\""+ designerId+"\",\""+moment(parseInt(millisecs[0])).format("YYYY/MM/DD h:mm:ss a")+"\",\""+timeOffset+"\");'>"+moment(parseInt(millisecs[0])).format("h:mm:ss a");+"</a></li>";
+                }
+                else
+                {
+
+                    outputE += "<li><a href='javascript:void(0)' onclick='setAppointment(\""+ clientId+"\",\""+ designerId+"\",\""+moment(parseInt(millisecs[0])).format("YYYY/MM/DD h:mm:ss a")+"\",\""+timeOffset+"\");'>"+moment(parseInt(millisecs[0])).format("h:mm:ss a");+"</a></li>";
+                }
+            }
+            $("#timesListM").html(outputM);
+            $("#timesListA").html(outputA);
+            $("#timesListE").html(outputE);
+            $("#timesDiv").show();
+        });
+    }
+</script>
+@{
+    ViewBag.Title = "Book";
+}
+
+<!-- Region 3 Wrap -->
+
+<div class="container region3wrap">
+
+
+    <!-- Content Top -->
+    <div class="row content_top">
+
+        <div class="nine columns">
+
+            <ul class="breadcrumbs">
+                <li><a href="@Request.Url.GetLeftPart(UriPartial.Authority)">Home</a></li>
+                <li><a href="@Request.Url.GetLeftPart(UriPartial.Authority)/Account">Profile</a></li>
+                <li class="current"><a href="javascript:void(0)">Book Appointment</a></li>
+            </ul>
+
+        </div>
+
+        <div class="three columns">
+
+            <div class="row">
+                <div class="twelve columns">
+                    <div class="row collapse top_search">
+                        <div class="ten mobile-three columns">
+                            <input type="text" placeholder="Enter search terms" />
+                        </div>
+                        <div class="two mobile-one columns">
+                            <a href="#" class="button icon-search"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- End Content Top -->
+
+</div>
+
+<!-- End Region 3 Wrap -->
+<!-- Region 4 Wrap -->
+
+<div class="container region4wrap">
+
+    <div class="row maincontent">
+
+        <div class="twelve columns">
+
+            <div class="page_title">
+
+                <div class="row">
+
+                    <div class="twelve columns">
+                        <h1>Book an Appointment</h1>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Blog Content -->
+        <div class="eight columns push-four">
+
+            <!-- Begin Article -->
+            <div class="row">
+
+                <div class="twelve columns" id="timesDiv" style="display:none;">
+                    <h3 id="apDate"></h3>
+                    <div class="four columns">
+                        <h4>Morning</h4>
+                        <ul id="timesListM" class="type1"></ul>
+                        </div>
+                    <div class="four columns">
+
+                        <h4>Afternoon</h4>
+                        <ul id="timesListA" class="type1"></ul>
+                        </div>
+                    <div class="four columns">
+
+                        <h4>Evening</h4>
+                        <ul id="timesListE" class="type1"></ul>
+                        </div>
+                    </div>
+
+                </div>
+
+
+        </div>
+        <!-- End Blog Content -->
+        <!-- Sidebar Left -->
+        <div class="four columns pull-eight sidebar-left">
+
+            <!-- Sidebar Widget -->
+            <div class="sidebar-widget">
+
+                <h3>Date</h3>
+                <p><input type="text" id="datepicker" readonly></p>
+                <button onclick="GetAvailableTimes();">Get Available Times</button>
+                <script>
+
+                    $("#datepicker").datepicker({
+                        dateFormat: 'DD, MM, d, yy',
+                        minDate: 0,
+                        beforeShowDay: noHolidays
+                    });
+
+                </script>
+
+            </div>
+            <!-- End Sidebar Widget -->
+
+        </div>
+        <!-- End Sidebar Left -->
+
+    </div>
+
+</div>
+
+<!-- End Region 4 Wrap -->

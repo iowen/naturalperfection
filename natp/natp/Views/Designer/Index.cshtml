@@ -1,0 +1,254 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<script>
+    function viewAppointment(aId) {
+        window.location.href = "@Request.Url.GetLeftPart(UriPartial.Authority)/Appointment/View/"+aId;
+    }
+</script>
+
+<script>
+    function ClientButtonCLicked() {
+        window.location.href = "@Request.Url.GetLeftPart(UriPartial.Authority)/Designer/Clients";
+    }
+    function AppointmentButtonCLicked() {
+        window.location.href = "@Request.Url.GetLeftPart(UriPartial.Authority)/Designer/Appointments";
+    }
+    function WorkScheduleButtonCLicked() {
+        window.location.href = "@Request.Url.GetLeftPart(UriPartial.Authority)/Designer/Schedule";
+    }
+    function CloseDateButtonCLicked() {
+        window.location.href = "@Request.Url.GetLeftPart(UriPartial.Authority)/Designer/CloseDate";
+    }
+</script>
+<style>
+	#calendar {
+		max-width: 900px;
+		margin: 0 auto;
+	}
+
+</style>
+
+
+
+<!-- Region 3 Wrap -->
+
+<div class="container region3wrap">
+
+
+    <!-- Content Top -->
+    <div class="row content_top">
+
+        <div class="nine columns">
+
+            <ul class="breadcrumbs">
+                <li><a href="@Request.Url.GetLeftPart(UriPartial.Authority)">Home</a></li>
+                <li class="current"><a href="javascript:void(0)">Designer Profile</a></li>
+            </ul>
+
+        </div>
+
+        <div class="three columns">
+
+            <div class="row">
+                <div class="twelve columns">
+                    <div class="row collapse top_search">
+                        <div class="ten mobile-three columns">
+                            <input type="text" placeholder="Enter search terms" />
+                        </div>
+                        <div class="two mobile-one columns">
+                            <a href="#" class="button icon-search"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- End Content Top -->
+
+</div>
+
+<!-- End Region 3 Wrap -->
+<!-- Region 4 Wrap -->
+
+<div class="container region4wrap">
+
+    <div class="row maincontent">
+
+        <div class="twelve columns">
+
+            <div class="page_title">
+
+                <div class="row">
+
+                    <div class="twelve columns">
+                        <h1>Welcome, @Html.Raw(ViewBag.designer.Account.FirstName + " " + ViewBag.designer.Account.LastName)</h1>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Blog Content -->
+        <div class="eight columns push-four">
+
+            <!-- Begin Article -->
+            <div class="row">
+
+                <div class="twelve columns">
+                    <div id='calendar'></div>
+                    <script>
+
+
+
+                        $('#calendar').fullCalendar({
+                            header: {
+                                left: 'prev,next today',
+                                center: 'title',
+                                right: 'month,agendaWeek,agendaDay'
+                            },
+                            defaultDate: moment().format("YYYY-MM-DD"),
+                            selectable: true,
+                            selectHelper: true,
+                            select: function(start, end) {
+                                $('#calendar').fullCalendar('changeView', 'agendaDay');
+                                $('#calendar').fullCalendar( 'gotoDate',start );
+                            },                            eventClick: function(calEvent, jsEvent, view) {
+                                if(calEvent.aId < 0)
+                                    return;
+                                
+                                    viewAppointment(calEvent.aId);
+                                
+
+                                // change the border color just for fun
+                                $(this).css('border-color', 'red');
+
+                            },
+                            editable: true,
+                            eventLimit: true, // allow "more" link when too many events
+                            events: @Html.Raw(ViewBag.appointmentHistory),
+
+                            });
+
+
+
+                    </script>
+                 
+
+                </div>
+
+
+            </div>
+ 
+           
+
+        </div>
+        <!-- End Blog Content -->
+        <!-- Sidebar Left -->
+        <div class="four columns pull-eight sidebar-left">
+
+            <!-- Sidebar Widget -->
+            <div class="sidebar-widget">
+
+                <h3>Menu</h3>
+
+                <ul class="toggle-view">
+
+                    <li>
+                        <button onclick="ClientButtonCLicked();">Clients</button>
+                    </li>
+                    <li>
+                        <button onclick="AppointmentButtonCLicked();">Appointments</button>
+                    </li>
+                    <li>
+                        <button onclick="WorkScheduleButtonCLicked();">Work Schedule</button>
+                    </li>
+                    <li>
+                        <button onclick="CloseDateButtonCLicked();">Close a Date</button>
+                    </li>
+
+                </ul>
+
+            </div>
+            <!-- End Sidebar Widget -->
+
+            <!-- Sidebar Widget -->
+            <div class="sidebar-widget">
+                <h3>Pending</h3>
+                <script>
+                    function confirmAppointment(aId)
+                    {
+                        $.post('@Url.Action("ConfirmAppointment", "Designer", new { })', { AppointmentId:aId }, function (data, status) {
+                            if (data.Status == "Success") {
+                                window.location.href = '@Url.Action("Index", "Home", new { })';
+                            }
+                        });
+                    }
+
+                    function rejectAppointment(aId)
+                    {
+                        $.post('@Url.Action("RejectAppointment", "Designer", new { })', { AppointmentId: aId }, function (data, status) {
+                            if (data.Status == "Success") {
+                                window.location.href = '@Url.Action("Index", "Home", new { })';
+                            }
+                        });
+                    }
+                </script>
+                <ul class="sidebar-list">
+                    @{
+                        foreach (var a in ViewBag.pendingAppointments)
+                        {
+
+                            @Html.Raw("<li>" + a.Client.Account.FirstName + " " + a.Client.Account.LastName + " - " + a.AppointmentTimeUtc.ToLocalTime().ToString("MMMM dd, yyyy h:mm tt") + "  <button onclick='confirmAppointment(\"" + a.AppointmentId + "\");'> Confirm</button><button onclick='rejectAppointment(\"" + a.AppointmentId + "\");'> Reject</button></li>");
+
+                        }
+                    }
+                </ul>
+
+            </div>
+            <!-- End Sidebar Widget -->
+            <!-- Sidebar Widget -->
+            <div class="sidebar-widget">
+
+
+                <h3>Upcoming</h3>
+                <script>
+                    function cancelAppointment(aId) {
+                        $.post('@Url.Action("CancelAppointment", "Designer", new { })', { AppointmentId: aId }, function (data, status) {
+                            if (data.Status == "Success") {
+                                window.location.href = '@Url.Action("Index", "Home", new { })';
+                            }
+                        });
+                    }
+
+
+                </script>
+                <ul class="sidebar-list">
+                    @{
+                        foreach (var a in ViewBag.upcomingAppointments)
+                        {
+
+                            @Html.Raw("<li><a href=\"javascript:void(0)\"  onclick='viewAppointment(" + a.AppointmentId + ");'>" + a.Client.Account.FirstName + " " + a.Client.Account.LastName + " - " + a.AppointmentTimeUtc.ToLocalTime().ToString("MMMM dd, yyyy h:mm tt") + " </a><button onclick='cancelAppointment(\"" + a.AppointmentId + "\");'> Cancel</button></li>");
+
+                        }
+                    }
+                </ul>
+
+            </div>
+            <!-- End Sidebar Widget -->
+
+
+        </div>
+        <!-- End Sidebar Left -->
+
+    </div>
+
+</div>
+
+<!-- End Region 4 Wrap -->

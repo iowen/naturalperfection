@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<script>
+    /* This is change event for your dropdownlist */
+    function GetMenuDashboard(type) {
+
+        /* Request the partial view with .get request. */
+        $.get('@Request.Url.GetLeftPart(UriPartial.Authority)/Administrator/GetDashboard?type=' + type, function (data) {
+            /* data is the pure html returned from action method, load it to your page */
+            $('#dashboardPlaceHolder').html(data);
+            /* little fade in effect */
+            $('#dashboardPlaceHolder').fadeIn('fast');
+        });
+
+    }
+</script>
+<!-- Region 4 Wrap -->
+
+<div class="container region4wrap">
+
+    <div class="row maincontent">
+
+
+        <div class="twelve columns">
+
+            <div class="page_title">
+
+                <div class="row">
+
+                    <div class="twelve columns">
+                        <h1>Admnin</h1>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="four columns">
+
+            <h3>Menu</h3>
+
+            <ul class="side-nav">
+                <li><a href="javascript:void(0)" onclick="GetMenuDashboard('photo');">Manage Photos</a></li>
+            </ul>
+
+        </div>
+
+        <div class="eight columns bottom20">
+            
+
+            <div id="dashboardPlaceHolder" style="display:none;"> </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- End Region 4 Wrap -->
+

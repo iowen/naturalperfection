@@ -1,0 +1,57 @@
+﻿@model natp.Models.RegisterViewModel
+
+
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "custom", role = "form" }))
+{
+
+        @Html.AntiForgeryToken()
+    <fieldset>
+        <legend>Register</legend>
+
+        @Html.ValidationSummary("", new { @class = "text-danger", id = "valSum" })
+
+        <div class="row">
+            <div class="twelve columns">
+
+                <div class="row">
+
+                    <div class="six columns">
+
+                        @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
+                        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+                    </div>
+
+                    <div class="six columns">
+                        @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
+                        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row">
+                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                </div>
+
+                <div class="row">
+                    <div class="six columns">
+                        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                    </div>
+                    <div class="six columns">
+                        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                    </div>
+                    </div>
+
+
+                    <div class="row">
+                            <input type="submit" class="button" value="Register" />
+                        </div>
+                <br />
+                    </div>
+            </div>
+</fieldset>
+
+}
+
+
+

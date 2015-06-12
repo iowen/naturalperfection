@@ -1,0 +1,215 @@
+﻿<style>
+    .ui-datepicker .ui-datepicker-calendar .ui-state-highlight a {
+        background: #00ffff none;
+        color: white;
+    }
+
+    .ui-datepicker { width: 17em; padding: .2em .2em 0; }
+.ui-datepicker .ui-datepicker-header { position:relative; padding:.2em 0; }
+.ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next { position:absolute; top: 2px; width: 1.8em; height: 1.8em; }
+.ui-datepicker .ui-datepicker-prev-hover, .ui-datepicker .ui-datepicker-next-hover { top: 1px; }
+.ui-datepicker .ui-datepicker-prev { left:2px; }
+.ui-datepicker .ui-datepicker-next { right:2px; }
+.ui-datepicker .ui-datepicker-prev-hover { left:1px; }
+.ui-datepicker .ui-datepicker-next-hover { right:1px; }
+.ui-datepicker .ui-datepicker-prev span, .ui-datepicker .ui-datepicker-next span { display: block; position: absolute; left: 50%; margin-left: -8px; top: 50%; margin-top: -8px;  }
+.ui-datepicker .ui-datepicker-title { margin: 0 2.3em; line-height: 1.8em; text-align: center; }
+.ui-datepicker .ui-datepicker-title select { font-size:1em; margin:1px 0; }
+.ui-datepicker select.ui-datepicker-month-year {width: 100%;}
+.ui-datepicker select.ui-datepicker-month, 
+.ui-datepicker select.ui-datepicker-year { width: 49%;}
+.ui-datepicker table {width: 100%; font-size: .9em; border-collapse: collapse; margin:0 0 .4em; }
+.ui-datepicker th { padding: .7em .3em; text-align: center; font-weight: bold; border: 0;  }
+.ui-datepicker td { border: 0; padding: 1px; }
+.ui-datepicker td span, .ui-datepicker td a { display: block; padding: .2em; text-align: right; text-decoration: none; }
+.ui-datepicker .ui-datepicker-buttonpane { background-image: none; margin: .7em 0 0 0; padding:0 .2em; border-left: 0; border-right: 0; border-bottom: 0; }
+.ui-datepicker .ui-datepicker-buttonpane button { float: right; margin: .5em .2em .4em; cursor: pointer; padding: .2em .6em .3em .6em; width:auto; overflow:visible; }
+.ui-datepicker .ui-datepicker-buttonpane button.ui-datepicker-current { float:left; }
+.ui-datepicker.ui-datepicker-multi { width:auto; }
+.ui-datepicker-multi .ui-datepicker-group { float:left; }
+.ui-datepicker-multi .ui-datepicker-group table { width:95%; margin:0 auto .4em; }
+.ui-datepicker-multi-2 .ui-datepicker-group { width:50%; }
+.ui-datepicker-multi-3 .ui-datepicker-group { width:33.3%; }
+.ui-datepicker-multi-4 .ui-datepicker-group { width:25%; }
+.ui-datepicker-multi .ui-datepicker-group-last .ui-datepicker-header { border-left-width:0; }
+.ui-datepicker-multi .ui-datepicker-group-middle .ui-datepicker-header { border-left-width:0; }
+.ui-datepicker-multi .ui-datepicker-buttonpane { clear:left; }
+.ui-datepicker-row-break { clear:both; width:100%; }
+
+</style>
+<script>
+    var alreadyClosed = [];
+    var alreadyJson = JSON.parse('@Html.Raw(ViewBag.closedJson)');
+   // alert(alreadyJson);
+</script>
+
+
+
+
+
+<!-- Region 3 Wrap -->
+
+<div class="container region3wrap">
+
+
+    <!-- Content Top -->
+    <div class="row content_top">
+
+        <div class="nine columns">
+
+            <ul class="breadcrumbs">
+                <li><a href="@Request.Url.GetLeftPart(UriPartial.Authority)">Home</a></li>
+                <li><a href="@Request.Url.GetLeftPart(UriPartial.Authority)/Account">Profile</a></li>
+                <li class="current"><a href="javascript:void(0)">Close a Date</a></li>
+            </ul>
+
+        </div>
+
+        <div class="three columns">
+
+            <div class="row">
+                <div class="twelve columns">
+                    <div class="row collapse top_search">
+                        <div class="ten mobile-three columns">
+                            <input type="text" placeholder="Enter search terms" />
+                        </div>
+                        <div class="two mobile-one columns">
+                            <a href="#" class="button icon-search"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- End Content Top -->
+
+</div>
+
+<!-- End Region 3 Wrap -->
+<!-- Region 4 Wrap -->
+
+<div class="container region4wrap">
+
+    <div class="row maincontent contact">
+
+        <div class="twelve columns">
+
+            <div class="page_title">
+
+                <div class="row">
+
+                    <div class="twelve columns">
+                        <h1>Close a Date</h1>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="three columns">
+
+            <h3>Dates Closed</h3>
+            <div id="closedDatesDiv">
+                <ul id="closedList"></ul>
+                <button onclick="saveClosedDates();">save</button>
+            </div>
+
+        </div>
+
+        <div class="nine columns">
+
+            <div id="datepicker"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- End Region 4 Wrap -->
+<script>
+    function saveClosedDates()
+    {
+        alert("s");
+        var datesToSave =  [];
+        $(".cDates").each(function () {
+            datesToSave.push( $(this).val());
+        });
+        var datesJson = JSON.stringify(datesToSave);
+
+        $.post('@Url.Action("SetCloseDates", "Designer", new { })', { DatesToClose: datesJson }, function (data, status) {
+            // alert(data.Status);
+            if (data.Status == "Success") {
+                window.location.href = "@Request.Url.GetLeftPart(UriPartial.Authority)/Designer/CloseDate";
+                return;
+            }
+            else {
+                alert("error");
+            }
+        });
+    }
+
+    function canCloseDate(dateToClose)
+    {
+        $.post('@Url.Action("CanClose", "Designer", new { })', { DateToClose: dateToClose }, function (data, status) {
+           // alert(data.Status);
+            if (data.Status == "Success") {
+                updateDatesList();
+            }
+            else {
+                removeDate(dateToClose);
+                alert("Cannot close " + dateToClose + " because there are appointments on this date.");
+            }
+        });
+    }
+
+    function removeDate(dateToRemove)
+    {
+       // alert("remove");
+        var dr = new moment(dateToRemove);
+        $('#datepicker').multiDatesPicker('removeDates', dr.toDate());
+        updateDatesList();
+    }
+
+    function updateDatesList()
+    {
+        var sdates = $('#datepicker').multiDatesPicker('getDates');
+     //   alert(sdates);
+
+        var sArray = sdates.toString().split(",");
+      //  alert(sArray);
+
+        var outHtml = "";
+
+        for (var i = 0; i< sArray.length; i++)
+        {
+            outHtml += "<li><input type='hidden' class='cDates' value='" + sArray[i] + "' />" + sArray[i] + "<button onclick='removeDate(\"" + sArray[i] + "\");'>Remove</button></li>"
+        }
+        $("#closedList").html(outHtml);
+    }
+</script>
+<script>
+
+    for (var i = 0; i < alreadyJson.length; i++)
+    {
+        var date = new moment(alreadyJson[i]);
+        alreadyClosed.push(date.toDate());
+    }
+    $("#datepicker").multiDatesPicker({
+        dateFormat: 'DD - MM/d/yy',
+        minDate: 1,
+        numberOfMonths: 3,
+        showButtonPanel: true,
+        addDates: alreadyClosed,
+        onSelect: function (dateText, inst) {
+            canCloseDate(dateText);
+        }
+    });
+    updateDatesList();
+</script>
+

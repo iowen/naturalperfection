@@ -1,0 +1,147 @@
+﻿
+<!-- Region 3 Wrap -->
+
+<div class="container region3wrap">
+
+
+    <!-- Content Top -->
+    <div class="row content_top">
+
+        <div class="nine columns">
+
+            <ul class="breadcrumbs">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">Pages</a></li>
+                <li class="current"><a href="#">Blog</a></li>
+            </ul>
+
+        </div>
+
+        <div class="three columns">
+
+            <div class="row">
+                <div class="twelve columns">
+                    <div class="row collapse top_search">
+                        <div class="ten mobile-three columns">
+                            <input type="text" placeholder="Enter search terms" />
+                        </div>
+                        <div class="two mobile-one columns">
+                            <a href="#" class="button icon-search"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- End Content Top -->
+
+</div>
+
+<!-- End Region 3 Wrap -->
+<!-- Region 4 Wrap -->
+<style>
+    
+.box {
+  margin: 5px;
+  padding: 5px;
+  background: #D8D5D2;
+  font-size: 11px;
+  line-height: 1.4em;
+  float: left;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
+}
+
+.box h2 {
+  font-size: 14px;
+  font-weight: 200;
+}
+
+.box img{
+  display: block;
+  width: 100%;
+}
+
+.rtl .box {
+  float: right;
+  text-align: right; 
+  direction: rtl;
+}
+.col3 { width: 30%; }
+</style>
+<div class="container region4wrap">
+
+    <div class="row maincontent">
+
+        <div class="twelve columns">
+
+            <div class="page_title">
+
+                <div class="row">
+
+                    <div class="four columns">
+                        <h1>@ViewBag.album.Title</h1>
+                    </div>
+
+                    <div class="eight columns">
+
+                        <!-- Portfolio Navigation -->
+                       
+                        <!-- End Portfolio Navigation -->
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Portfolio Content -->
+      
+                <!-- Portfolio Content -->
+           
+                   <div id="container" >
+                       @{
+                           foreach (var i in ViewBag.album.PhotoAlbumItems)
+                           {
+                            <div class="box col3">
+                                <a href="@i.Photo.Location" data-lightbox="example-set" ><img src="@i.Photo.Location" alt="" /></a>
+                            </div>
+                           }
+                    }
+                   </div>
+                  
+                   
+                <!-- End Portfolio Content -->
+
+            
+
+        
+        <!-- End Portfolio Content -->
+
+    </div>
+
+</div>
+
+<!-- End Region 4 Wrap -->
+<script>
+    $(function () {
+
+        var $container = $('#container');
+
+        $container.imagesLoaded(function () {
+            $container.masonry({
+                itemSelector: '.box'
+            });
+        });
+
+    });
+</script>
+<script src="/Scripts/jquery-1.10.2.js"></script>
+
+
+<script src="/Scripts/javascripts/lightbox.js"></script>

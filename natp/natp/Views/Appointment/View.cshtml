@@ -1,0 +1,163 @@
+﻿@using Microsoft.AspNet.Identity
+
+
+@{
+    ViewBag.Title = "View";
+}
+
+<!-- Region 3 Wrap -->
+<script>
+    function reloadComments(id) {
+        $.post('@Url.Action("GetAppointmentComments", "Appointment", new { })', { id: id }, function (data) {
+            successC(data);
+
+        });
+
+    }
+
+    function reloadNotes(id) {
+        $.post('@Url.Action("GetAppointmentNotes", "Appointment", new { })', { id: id }, function (data) {
+            successN(data);
+
+        });
+
+    }
+    function successC(result) {
+        $("#cc").html(result);
+    }
+    function successN(result) {
+        $("#nc").html(result);
+    }
+</script>
+<div class="container region3wrap">
+
+
+    <!-- Content Top -->
+    <div class="row content_top">
+
+        <div class="nine columns">
+
+            <ul class="breadcrumbs">
+                <li><a href="@Request.Url.GetLeftPart(UriPartial.Authority)">Home</a></li>
+                <li><a href="@Request.Url.GetLeftPart(UriPartial.Authority)/Account">Profile</a></li>
+                <li class="current"><a href="javascript:void(0)">View Appointment</a></li>
+            </ul>
+
+        </div>
+
+        <div class="three columns">
+
+            <div class="row">
+                <div class="twelve columns">
+                    <div class="row collapse top_search">
+                        <div class="ten mobile-three columns">
+                            <input type="text" placeholder="Enter search terms" />
+                        </div>
+                        <div class="two mobile-one columns">
+                            <a href="#" class="button icon-search"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- End Content Top -->
+
+</div>
+
+<!-- End Region 3 Wrap -->
+<!-- Region 4 Wrap -->
+
+<div class="container region4wrap">
+
+    <div class="row maincontent">
+
+        <div class="twelve columns">
+
+            <div class="page_title">
+
+                <div class="row">
+
+                    <div class="twelve columns">
+                        <h1>Appointment On  @Html.Raw(ViewBag.appointment.AppointmentTimeUtc.ToLocalTime().ToString("MMMM dd, yyyy h:mm tt"))</h1>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="twelve columns">
+
+            <div class="row">
+
+                <div class="four columns">
+
+                    <h4>Overview</h4>
+                    <ul class="disc">
+                        <li>Designer :  @Html.Raw(ViewBag.appointment.Designer.Account.FirstName + " " + ViewBag.appointment.Designer.Account.LastName)</li>
+                        <li>Client :  @Html.Raw(ViewBag.appointment.Client.Account.FirstName + " " + ViewBag.appointment.Client.Account.LastName)</li>
+                        <li>Date :  @Html.Raw(ViewBag.appointment.AppointmentTimeUtc.ToLocalTime().ToString("MMMM dd, yyyy h:mm tt"))</li>
+                    </ul>
+
+                </div>
+
+                <!-- Blog Content -->
+
+                    <div class="eight columns comments">
+                        <div id="cc">
+                        @Html.Partial("_AppointmentCommentPartial", new natp.Models.AppointmentCommentViewModel() { Comments = ViewBag.appointment.AppointmentComments })
+                            </div>
+
+
+
+                    </div>
+
+                    <div class="eight columns leave-comment">
+
+                        @Html.Partial("_AppointmentCommentFormPartial", new natp.Models.AppointmentCommentFormViewModel() {AccountId = int.Parse(User.Identity.GetUserId()), AppointmentId = ViewBag.appointment.AppointmentId , CanComment = ViewBag.appointment.AppointmentTimeUtc > DateTime.UtcNow})
+
+                    </div>
+                </div>
+            <div class="row">
+
+                @{
+                    if (ViewBag.appointment.Designer.AccountId == int.Parse(User.Identity.GetUserId()))
+                    {
+                        <div class="eight columns comments">
+                            <div id="nc">
+                                @Html.Partial("_AppointmentNotePartial", new natp.Models.AppointmentNoteViewModel() { Notes = ViewBag.appointment.AppointmentNotes })
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="eight columns leave-comment">
+
+                            @Html.Partial("_AppointmentNoteFormPartial", new natp.Models.AppointmentNoteFormViewModel() { AppointmentId = ViewBag.appointment.AppointmentId })
+
+                        </div>
+                    }
+                }
+            </div>
+
+                    <!-- End  Article -->
+
+
+                </div>
+                <!-- End Blog Content -->
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- End Region 4 Wrap -->
+<!-- Region 9 Wrap -->

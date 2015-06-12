@@ -1,0 +1,44 @@
+﻿@using natp.Models
+@model AppointmentNoteFormViewModel
+           <script>
+    function submitNote() {
+        var appointmentId = $("#AppointmentId").val();
+        var text = $("#nText").val();
+
+        var antiForg = $("input[name='__RequestVerificationToken']").val();
+
+        var $form = $("#noteForm");
+        if($form.valid()) {
+            //Ajax call here
+            $.post('@Url.Action("MakeNote", "Appointment", new { })', { __RequestVerificationToken: antiForg,  AppointmentId: appointmentId, Text: text}, function (data, status) {
+            if( data.Status == "Success")
+            {
+                $("#nText").val("");
+                reloadNotes(@Html.Raw(Model.AppointmentId));
+            }
+            });
+            }
+            }
+            </script>
+
+            @using (Html.BeginForm("MakeNote", "Appointment", FormMethod.Post, new { @class = "form-horizontal", role = "form", onsubmit = "submitNote();return false;" ,id="noteForm" }))
+            {
+                @Html.AntiForgeryToken()
+    <h3>Make a note</h3>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    
+ 
+
+        <div class="row">
+            <input type="hidden" name="AppointmentId" id="AppointmentId" value="@Html.Raw(Model.AppointmentId)" />
+
+            <div class="twelve columns">
+                <label>Message<span> (required)</span></label>
+                @Html.TextAreaFor(m => m.Text, new { @class = "form-control", id="nText" })
+            </div>
+        </div>
+        <input type="submit" value="Submit" class="medium button" />
+        
+            }
+       

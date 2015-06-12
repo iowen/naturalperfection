@@ -1,0 +1,435 @@
+﻿<!DOCTYPE html>
+
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
+ <!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" id="view" content="width=device-width minimum-scale=1, maximum-scale=1" />
+
+    <title>@ViewBag.Title - Natural Perfection</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <!-- Google Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/npJq")
+
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+    <script src="http://multidatespickr.sourceforge.net/jquery-ui.multidatespicker.js"></script>
+
+    <script>
+		jQuery(function(){
+
+			jQuery('#camera_wrap_1').camera({
+				thumbnails: true
+			});
+
+		});
+    </script>
+
+    @Scripts.Render("~/bundles/npJq2")
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="/Scripts/javascripts/fullcalendar.js"></script>
+
+    @*<link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.3.1/fullcalendar.print.css" rel="stylesheet"/>*@
+
+
+
+    <!-- IE Fix for HTML5 Tags -->
+    <!--[if lt IE 9]>
+      <script src=" http />/html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <style>
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            opacity: 0.5;
+            filter: alpha(opacity=50);
+            z-index: 999;
+        }
+
+        #modal {
+            position: absolute;
+            width: 900px;
+            height: 700px;
+            left: 50%;
+            top: 50%;
+            margin-left: -450px;
+            margin-top: -350px;
+            background: #fff;
+            border-radius: 14px;
+            color: #000;
+            padding: 8px;
+            z-index: 9999;
+            overflow: auto;
+        }
+
+        #content {
+            border-radius: 8px;
+            background: #fff;
+            padding: 20px;
+            z-index: 99999;
+        }
+
+        #close {
+            position: absolute;
+            color: #f00;
+            width: 24px;
+            height: 27px;
+            display: block;
+            top: -1px;
+            right: -7px;
+            z-index: 99999;
+        }
+        </style>
+    <script>
+    // Wait until the DOM has loaded before querying the document
+    function showModal() {
+
+        document.getElementById("overlay").style.display = "block";
+        document.getElementById("modal").style.display = "block";
+    }
+
+    function closeModal() {
+
+        document.getElementById("overlay").style.display = "none";
+        document.getElementById("modal").style.display = "none";
+    }
+    </script>
+
+</head>
+<body>
+    <div id='overlay' style="display:none;"></div>
+    <div id='modal' style="display:none;">
+        <div id='contentt' style="height:480px;min-height:480px;"></div>
+        <a href='javascript:(0)' id='close' onclick="closeModal();">X</a>
+    </div>
+    @*<div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">*@
+        @*@RenderBody()*@
+        @*<hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>*@
+
+    <div class="container region1wrap">
+
+        <!-- Top Header -->
+        <div class="row top_header">
+
+            <div class="six columns">
+
+                @Html.Partial("_LoginPartial2")
+
+            </div>
+
+            <div class="six columns">
+
+                <ul class="top_social">
+                    <li><a class="has-tipsy" href="http://twitter.com/" title="Twitter"><img src="/Images/images/social/Twitter.png" alt="Twitter"></a></li>
+                    <li><a class="has-tipsy" href="http://www.facebook.com/" title="Facebook"><img src="/Images/images/social/Facebook.png" alt="Facebook"></a></li>
+                    <li><a class="has-tipsy" href="http://google.com/" title="Google"><img src="/Images/images/social/Google.png" alt="Google+"></a></li>
+                    <li><a class="has-tipsy" href="http://www.LinkedIn.com/" title="LinkedIn"><img src="/Images/images/social/LinkedIn.png" alt="LinkedIn"></a></li>
+                    <li><a class="has-tipsy" href="http://www.Flickr.com/" title="Flickr"><img src="/Images/images/social/Flickr.png" alt="Flickr"></a></li>
+                    <li><a class="has-tipsy" href="http://vimeo.com/" title="Vimeo"><img src="/Images/images/social/Vimeo.png" alt="Vimeo"></a></li>
+                    <li><a class="has-tipsy" href="http://www.rss.com/" title="RSS"><img src="/Images/images/social/RSS.png" alt="RSS"></a></li>
+                </ul>
+
+            </div>
+
+        </div>
+        <!-- End Top Header -->
+
+    </div>
+
+    <!-- End Region 1 Wrap -->
+    <!-- Region 2 Wrap -->
+
+    <div class="container region2wrap">
+
+        <div class="row">
+
+            <!-- Logo -->
+
+            <div class="three columns">
+
+                <a href="@Request.Url.GetLeftPart(UriPartial.Authority)" id="logo"><h1>Natural&nbsp;<span>Perfection</span></h1></a>
+
+            </div>
+
+            <!-- End Logo -->
+            <!-- Main Navigation -->
+
+            <div class="nine columns">
+
+                <nav class="top-bar">
+
+                    <ul>
+                        <!-- Toggle Button Mobile -->
+                        <li class="name">
+                            <h1><a href="#"> Please select your page</a></h1>
+                        </li>
+                        <li class="toggle-topbar"><a href="#"></a></li>
+                        <!-- End Toggle Button Mobile -->
+                    </ul>
+
+
+
+                    <section>
+                        <!-- Nav Section -->
+                        <ul class="right">
+
+                            <li >
+                                @if (@HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString().ToLower().Equals("home") || @HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString().ToLower().Equals("register"))
+                                {
+                                <a class="active" href="@Request.Url.GetLeftPart(UriPartial.Authority)">Home</a>
+                                }
+                                else
+                                {
+                                    <a  href="@Request.Url.GetLeftPart(UriPartial.Authority)">Home</a>
+                                }
+                                
+                            </li>
+                            @{
+                                if (Request.IsAuthenticated)
+                                {
+                            <li >
+                                @if (@HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString().ToLower().Equals("account") || @HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString().ToLower().Equals("designer") || @HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString().ToLower().Equals("client"))
+                                {
+                                    <a class="active" href="@Request.Url.GetLeftPart(UriPartial.Authority)/Account">Account</a>
+                                }
+                                else
+                                {
+                                    <a href="@Request.Url.GetLeftPart(UriPartial.Authority)/Account">Account</a>
+                                }
+
+                            </li>
+                            }
+                                if (User.IsInRole("SuperAdmin"))
+                                {
+                            <li >
+                                @if (@HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString().ToLower().Equals("administrator"))
+                                {
+                                    <a class="active" href="@Request.Url.GetLeftPart(UriPartial.Authority)/Administrator">Admin</a>
+                                }
+                                else
+                                {
+                                    <a href="@Request.Url.GetLeftPart(UriPartial.Authority)/Administrator">Admin</a>
+                                }
+
+                                
+                            </li>
+                                }
+}
+                            <li >
+                                @if (@HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString().ToLower().Equals("portfolio"))
+                                {
+                                    <a class="active" href="@Request.Url.GetLeftPart(UriPartial.Authority)/Portfolio">Portfolio</a>
+                                }
+                                else
+                                {
+                                    <a href="@Request.Url.GetLeftPart(UriPartial.Authority)/Portfolio">Portfolio</a>
+                                }
+                                
+                            </li>
+
+                            <li>
+                                @if (@HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString().ToLower().Equals("about"))
+                                {
+                                    <a class="active" href="@Request.Url.GetLeftPart(UriPartial.Authority)/About">About</a>
+                                }
+                                else
+                                {
+                                    <a href="@Request.Url.GetLeftPart(UriPartial.Authority)/About">About</a>
+                                }
+
+                            </li>
+
+                            <li>
+                                @if (@HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString().ToLower().Equals("contact"))
+                                {
+                                    <a class="active" href="@Request.Url.GetLeftPart(UriPartial.Authority)/Contact">Contact</a>
+                                }
+                                else
+                                {
+                                    <a href="@Request.Url.GetLeftPart(UriPartial.Authority)/Contact">Contact</a>
+                                }
+
+                            </li>
+
+                        </ul>
+                    </section><!-- End Nav Section -->
+
+                </nav>
+
+            </div>
+
+            <!-- End Main Navigation -->
+
+        </div>
+
+    </div>
+
+    <!-- End Region 2 Wrap -->
+    @RenderBody()
+    <!-- Region 9 Wrap -->
+
+    <div class="container region9wrap">
+
+        <!-- Bottom Content -->
+        <div class="row content_bottom">
+
+            <!-- // // // // // // // // // // -->
+
+            <div class="eight columns">
+
+                <h2>Sign up for our newsletter</h2>
+                <p>Keep up-to-date with the latest news and updates by subscribing to our newsletter.</p>
+
+            </div>
+
+            <!-- // // // // // // // // // // -->
+
+            <div class="four columns">
+                <div class="row collapse newsletter-input">
+                    <div class="eight mobile-three columns">
+                        <input type="text" placeholder="Enter your email address" />
+                    </div>
+                    <div class="four mobile-one columns">
+                        <a href="#" class="button expand">Subscribe</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- // // // // // // // // // // -->
+
+        </div>
+        <!-- End Bottom Content -->
+        <!-- Footer -->
+        <div class="row footer">
+
+      
+
+        </div>
+        <!-- End Footer -->
+
+    </div>
+
+    <!-- End Region 9 Wrap -->
+    <!-- Region 10 Wrap -->
+
+    <div class="container region10wrap">
+
+        <div class="row footer_bottom">
+
+            <!-- Bottom -->
+            <!-- // // // // // // // // // // -->
+
+            <div class="six columns">
+
+                <p class="copyright">© 2012 TouchM by 4GraFx. All rights reserved</p>
+
+            </div>
+
+            <!-- // // // // // // // // // // -->
+
+            <div class="six columns">
+
+                <ul class="link-list">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Pages</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Porfolio</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+
+            </div>
+
+            <!-- // // // // // // // // // // -->
+            <!-- Bottom -->
+
+        </div>
+    </div>
+
+    <!-- End Region 10 Wrap -->
+    <!-- Included JS Files (Uncompressed) -->
+    <!--
+
+    <script src="javascripts/jquery.js"></script>
+
+    <script src="javascripts/jquery.foundation.mediaQueryToggle.js"></script>
+
+    <script src="javascripts/jquery.foundation.forms.js"></script>
+
+    <script src="javascripts/jquery.foundation.reveal.js"></script>
+
+    <script src="javascripts/jquery.foundation.navigation.js"></script>
+
+    <script src="javascripts/jquery.foundation.buttons.js"></script>
+
+    <script src="javascripts/jquery.foundation.tabs.js"></script>
+
+    <script src="javascripts/jquery.foundation.tooltips.js"></script>
+
+    <script src="javascripts/jquery.foundation.accordion.js"></script>
+
+    <script src="javascripts/jquery.placeholder.js"></script>
+
+    <script src="javascripts/jquery.foundation.alerts.js"></script>
+
+    <script src="javascripts/jquery.foundation.topbar.js"></script>
+
+    -->
+    <!-- Back To Top -->
+    <a href="#" class="scrollup">Scroll</a>
+    <!-- End Back To Top -->
+    <!-- Reveal Modal -->
+    <div id="Login" class="reveal-modal login-modal">
+
+        <h2>Login</h2>
+        <p>Please login using your credentials recived by email when you register.</p>
+        @Html.Partial("_LoginFormPartial")
+
+        <a class="close-reveal-modal">&#215;</a>
+
+    </div>
+
+
+</body>
+</html>

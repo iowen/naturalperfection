@@ -1,0 +1,214 @@
+﻿<script>
+    function viewAppointment(aId) {
+        window.location.href = "@Request.Url.GetLeftPart(UriPartial.Authority)/Appointment/View/"+aId;
+    }
+</script>
+
+<script>
+    function BookButtonCLicked() {
+        window.location.href = "@Request.Url.GetLeftPart(UriPartial.Authority)/Appointment/Book";
+    }
+    function HistoryButtonCLicked() {
+        window.location.href = "@Request.Url.GetLeftPart(UriPartial.Authority)/Client/History";
+    }
+</script>
+
+<!-- Region 3 Wrap -->
+
+<div class="container region3wrap">
+
+
+    <!-- Content Top -->
+    <div class="row content_top">
+
+        <div class="nine columns">
+
+            <ul class="breadcrumbs">
+                <li><a href="@Request.Url.GetLeftPart(UriPartial.Authority)">Home</a></li>
+                <li class="current"><a href="javascript:void(0)">Client Profile</a></li>
+            </ul>
+
+        </div>
+
+        <div class="three columns">
+
+            <div class="row">
+                <div class="twelve columns">
+                    <div class="row collapse top_search">
+                        <div class="ten mobile-three columns">
+                            <input type="text" placeholder="Enter search terms" />
+                        </div>
+                        <div class="two mobile-one columns">
+                            <a href="#" class="button icon-search"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- End Content Top -->
+
+</div>
+
+<!-- End Region 3 Wrap -->
+<!-- Region 4 Wrap -->
+
+<div class="container region4wrap">
+
+    <div class="row maincontent">
+
+        <div class="twelve columns">
+
+            <div class="page_title">
+
+                <div class="row">
+
+                    <div class="twelve columns">
+                        <h1>Welcome, @Html.Raw(ViewBag.client.Account.FirstName + " " + ViewBag.client.Account.LastName)</h1>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Blog Content -->
+        <div class="eight columns push-four">
+
+            <!-- Begin Article -->
+            <div class="row">
+
+                <div class="twelve columns">
+                    <div class="six columns">
+
+                        <h3>Account Info.</h3>
+
+                        <!-- List Circle -->
+                        <ul class="circle">
+                            <li>Name : @Html.Raw(ViewBag.client.Account.FirstName + " " + ViewBag.client.Account.LastName)</li>
+                            <li>Email : @Html.Raw(ViewBag.client.Account.Email)</li>
+                        </ul>
+                        <!-- End List Circle -->
+
+                    </div>
+                    <div class="six columns">
+                        <h3>Today</h3>
+                        <ul class="sidebar-list">
+                            @{
+                                if (ViewBag.todaysAppointment != null)
+                                {
+
+                                    @Html.Raw("<li>" + ViewBag.todaysAppointment.AppointmentTimeUtc.ToLocalTime().ToString("MMMM dd, yyyy h:mm tt") + "</li>");
+
+                                }
+                            }
+
+                        </ul>
+                    </div>
+
+
+
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="twelve columns">
+                    <div class="six columns">
+                        <h3>Alerts</h3>
+
+                        <div class="alert-box">
+                            This is a standard alert.
+                            <a href="" class="close">&times;</a>
+                        </div>
+
+                        <div class="alert-box success">
+                            This is a success alert.
+                            <a href="" class="close">&times;</a>
+                        </div>
+
+                        <div class="alert-box alert">
+                            This is an alert.
+                            <a href="" class="close">&times;</a>
+                        </div>
+
+                        <div class="alert-box secondary">
+                            This is a secondary alert.
+                            <a href="" class="close">&times;</a>
+                        </div>
+
+                    </div>
+
+                    <div class="six columns">
+                        <h3>Upcoming</h3>
+
+                        <ul class="sidebar-list">
+                            @{
+                                if (ViewBag.upcomingAppointment != null)
+                                {
+
+                                    @Html.Raw("<li><a href=\"javascript:void(0)\"  onclick='viewAppointment("+ ViewBag.upcomingAppointment.AppointmentId+");'>" + ViewBag.upcomingAppointment.AppointmentTimeUtc.ToLocalTime().ToString("MMMM dd, yyyy h:mm tt") + "</a></li>");
+
+                                }
+                            }
+
+                        </ul>
+                    </div>
+
+
+
+                </div>
+            </div>
+            </div>
+                <!-- End Blog Content -->
+                <!-- Sidebar Left -->
+                <div class="four columns pull-eight sidebar-left">
+
+                    <!-- Sidebar Widget -->
+                    <div class="sidebar-widget">
+
+                        <h3>Menu</h3>
+
+                        <ul class="toggle-view">
+
+                            <li>
+                                <button onclick="BookButtonCLicked();">Book Appointment</button>
+                            </li>
+                            <li>
+                                <button onclick="HistoryButtonCLicked();">Appointment History</button>
+                            </li>
+
+
+                        </ul>
+
+                    </div>
+                    <!-- End Sidebar Widget -->
+                    <!-- Sidebar Widget -->
+                    <div class="sidebar-widget">
+                        <h3>Pending</h3>
+                        <ul class="sidebar-list">
+                            @{
+                                foreach (var a in ViewBag.pendingAppointments)
+                                {
+
+                                    @Html.Raw("<li>" + a.AppointmentTimeUtc.ToLocalTime().ToString("MMMM dd, yyyy h:mm tt") + "</li>");
+
+                                }
+                            }
+                        </ul>
+
+                    </div>
+                    <!-- End Sidebar Widget -->
+
+
+                </div>
+                <!-- End Sidebar Left -->
+
+            </div>
+
+</div>
+
+<!-- End Region 4 Wrap -->
