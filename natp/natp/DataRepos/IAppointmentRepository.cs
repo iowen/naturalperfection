@@ -13,6 +13,7 @@ namespace natp.DataRepos
         List<Appointment> getDesignerAppointments(int id);
         List<Appointment> getDesignerAppointmentsForDate(int id, DateTime date);
         List<DateTime> getAvailableDesignerAppointmentsForDate(int id, DateTime date, WorkScheduleModel schedule);
+        bool canScheduleAppointmentForDesigner(int designer, DateTime date);
         List<Appointment> getDesignerPendingAppointments(int id);
         List<Appointment> getDesignerUpcomingAppointments(int id);
         List<Appointment> getClientAppointments(int id);

@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using natp.Models;
+using System.Threading;
 
 namespace natp.Controllers
 {
@@ -77,9 +78,20 @@ namespace natp.Controllers
             int hours = (int)model.Offset;
             int mins = (int)((model.Offset - (float)hours) * 60.0);
             var utcTime = new DateTime(tztime.Year, tztime.Month, tztime.Day, tztime.Hour - hours, tztime.Minute - mins, 0, DateTimeKind.Utc);
-            var apt = new Appointment() { ClientId = model.ClientId, Designerd = model.DesignerId, IsCanceled = false, IsConfirmed = false, DateCreatedUtc = DateTime.UtcNow, AppointmentTimeUtc = utcTime, TimeOffset = (decimal)model.Offset };
-            var aId = aRepo.addAppointment(apt);
-            var response = new BookTimesResponse() { Status = "Success" };
+            var response = new BookTimesResponse();
+            if (Monitor.TryEnter(GlobalVariables.BookAppointmentLock, TimeSpan.FromSeconds(30)))
+            {
+                if (aRepo.canScheduleAppointmentForDesigner(model.DesignerId, utcTime))
+                {
+                    var apt = new Appointment() { ClientId = model.ClientId, Designerd = model.DesignerId, IsCanceled = false, IsConfirmed = false, DateCreatedUtc = DateTime.UtcNow, AppointmentTimeUtc = utcTime, TimeOffset = (decimal)model.Offset };
+                    var aId = aRepo.addAppointment(apt);
+                    response = new BookTimesResponse() { Status = "Success" };
+                }
+                else
+                    response = new BookTimesResponse() { Status = "Failure" };
+            }
+            else
+             response = new BookTimesResponse() { Status = "Failure" };
             return new JsonResult() { Data = response };
         }
 

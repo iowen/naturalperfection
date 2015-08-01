@@ -1,4 +1,5 @@
-﻿using System;
+﻿using natp.DataRepos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,6 +11,9 @@ namespace natp.Controllers
     {
         public ActionResult Index()
         {
+            var photoRepo = new PhotoAlbumRepository(new npDataContext());
+            var featured = photoRepo.getFeaturedPhotoAlbums();
+            ViewBag.featuredPhotoAlbums = featured;
             return View();
         }
 

@@ -9,9 +9,8 @@
         <div class="nine columns">
 
             <ul class="breadcrumbs">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="#">Pages</a></li>
-                <li class="current"><a href="#">Register</a></li>
+                <li><a href="@Request.Url.GetLeftPart(UriPartial.Authority)">Home</a></li>
+                <li class="current"><a href="javascript:void(0)">Register</a></li>
             </ul>
 
         </div>
@@ -20,14 +19,14 @@
 
             <div class="row">
                 <div class="twelve columns">
-                    <div class="row collapse top_search">
+                    @*<div class="row collapse top_search">
                         <div class="ten mobile-three columns">
                             <input type="text" placeholder="Enter search terms" />
                         </div>
                         <div class="two mobile-one columns">
                             <a href="#" class="button icon-search"></a>
                         </div>
-                    </div>
+                    </div>*@
                 </div>
             </div>
 

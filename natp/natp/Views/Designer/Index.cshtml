@@ -54,14 +54,14 @@
 
             <div class="row">
                 <div class="twelve columns">
-                    <div class="row collapse top_search">
+                    @*<div class="row collapse top_search">
                         <div class="ten mobile-three columns">
                             <input type="text" placeholder="Enter search terms" />
                         </div>
                         <div class="two mobile-one columns">
                             <a href="#" class="button icon-search"></a>
                         </div>
-                    </div>
+                    </div>*@
                 </div>
             </div>
 
@@ -157,21 +157,19 @@
             <div class="sidebar-widget">
 
                 <h3>Menu</h3>
-
-                <ul class="toggle-view">
-
+                <ul class="side-nav">
                     <li>
-                        <button onclick="ClientButtonCLicked();">Clients</button>
-                    </li>
+                        <a href="javascript:void(0)" onclick="ClientButtonCLicked();">Clients</a>
+</li>
                     <li>
-                        <button onclick="AppointmentButtonCLicked();">Appointments</button>
-                    </li>
+                        <a href="javascript:void(0)" onclick="AppointmentButtonCLicked();" >Appointments</a>
+</li>
                     <li>
-                        <button onclick="WorkScheduleButtonCLicked();">Work Schedule</button>
-                    </li>
+                        <a href="javascript:void(0)" onclick="WorkScheduleButtonCLicked();" >Work Schedule</a>
+</li>
                     <li>
-                        <button onclick="CloseDateButtonCLicked();">Close a Date</button>
-                    </li>
+                        <a href="javascript:void(0)" onclick="CloseDateButtonCLicked();">Close a Date</a>
+</li>
 
                 </ul>
 
@@ -184,9 +182,10 @@
                 <script>
                     function confirmAppointment(aId)
                     {
+
                         $.post('@Url.Action("ConfirmAppointment", "Designer", new { })', { AppointmentId:aId }, function (data, status) {
                             if (data.Status == "Success") {
-                                window.location.href = '@Url.Action("Index", "Home", new { })';
+                                window.location.href = '@Url.Action("Index", "Designer", new { })';
                             }
                         });
                     }
@@ -195,7 +194,7 @@
                     {
                         $.post('@Url.Action("RejectAppointment", "Designer", new { })', { AppointmentId: aId }, function (data, status) {
                             if (data.Status == "Success") {
-                                window.location.href = '@Url.Action("Index", "Home", new { })';
+                                window.location.href = '@Url.Action("Index", "Designer", new { })';
                             }
                         });
                     }
@@ -205,7 +204,7 @@
                         foreach (var a in ViewBag.pendingAppointments)
                         {
 
-                            @Html.Raw("<li>" + a.Client.Account.FirstName + " " + a.Client.Account.LastName + " - " + a.AppointmentTimeUtc.ToLocalTime().ToString("MMMM dd, yyyy h:mm tt") + "  <button onclick='confirmAppointment(\"" + a.AppointmentId + "\");'> Confirm</button><button onclick='rejectAppointment(\"" + a.AppointmentId + "\");'> Reject</button></li>");
+                            @Html.Raw("<li>" + a.Client.Account.FirstName + " " + a.Client.Account.LastName + " - " + a.AppointmentTimeUtc.ToLocalTime().ToString("MMMM dd, yyyy h:mm tt") + " <ul class='button-group radius'><li> <button class='button radius small' onclick='confirmAppointment(\"" + a.AppointmentId + "\");'> Confirm</button></li><li><button class='button radius small' onclick='rejectAppointment(\"" + a.AppointmentId + "\");'> Reject</button></li></ul></li>");
 
                         }
                     }
@@ -234,7 +233,7 @@
                         foreach (var a in ViewBag.upcomingAppointments)
                         {
 
-                            @Html.Raw("<li><a href=\"javascript:void(0)\"  onclick='viewAppointment(" + a.AppointmentId + ");'>" + a.Client.Account.FirstName + " " + a.Client.Account.LastName + " - " + a.AppointmentTimeUtc.ToLocalTime().ToString("MMMM dd, yyyy h:mm tt") + " </a><button onclick='cancelAppointment(\"" + a.AppointmentId + "\");'> Cancel</button></li>");
+                            @Html.Raw("<li><a href=\"javascript:void(0)\"  onclick='viewAppointment(" + a.AppointmentId + ");'>" + a.Client.Account.FirstName + " " + a.Client.Account.LastName + " - " + a.AppointmentTimeUtc.ToLocalTime().ToString("MMMM dd, yyyy h:mm tt") + " </a><button class='button radius small'  onclick='cancelAppointment(\"" + a.AppointmentId + "\");'> Cancel</button></li>");
 
                         }
                     }

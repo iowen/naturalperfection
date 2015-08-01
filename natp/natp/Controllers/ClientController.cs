@@ -35,5 +35,18 @@ namespace natp.Controllers
             ViewBag.client = c;
             return View();
         }
+
+        // GET: Client
+        public ActionResult View(int id)
+        {
+            var cRepo = new ClientRepository(new npDataContext());
+            var c = cRepo.getClient(id);
+            ViewBag.upcomingAppointment = c.Appointments.Where<Appointment>(s => s.AppointmentTimeUtc > DateTime.UtcNow && s.IsConfirmed == true && s.IsCanceled == false).ToList().FirstOrDefault();
+            ViewBag.todaysAppointment = c.Appointments.Where<Appointment>(s => s.AppointmentTimeUtc.Date == DateTime.UtcNow.Date && s.IsConfirmed == true && s.IsCanceled == false).ToList().FirstOrDefault();
+            ViewBag.pendingAppointments = c.Appointments.Where<Appointment>(s => s.AppointmentTimeUtc > DateTime.UtcNow && s.IsConfirmed == false && s.IsCanceled == false).ToList();
+            ViewBag.AppointmentHistory = c.Appointments.Where<Appointment>(s => s.AppointmentTimeUtc < DateTime.UtcNow && s.IsConfirmed == true && s.IsCanceled == false).ToList();
+            ViewBag.client = c;
+            return View();
+        }
     }
 }

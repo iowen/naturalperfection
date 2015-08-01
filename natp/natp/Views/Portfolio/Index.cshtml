@@ -10,9 +10,8 @@
         <div class="nine columns">
 
             <ul class="breadcrumbs">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="#">Pages</a></li>
-                <li class="current"><a href="#">Blog</a></li>
+                <li><a href="@Request.Url.GetLeftPart(UriPartial.Authority)">Home</a></li>
+                <li class="current"><a href="javascript:void(0)">Portfolio</a></li>
             </ul>
 
         </div>
@@ -21,14 +20,14 @@
 
             <div class="row">
                 <div class="twelve columns">
-                    <div class="row collapse top_search">
+                    @*<div class="row collapse top_search">
                         <div class="ten mobile-three columns">
                             <input type="text" placeholder="Enter search terms" />
                         </div>
                         <div class="two mobile-one columns">
                             <a href="#" class="button icon-search"></a>
                         </div>
-                    </div>
+                    </div>*@
                 </div>
             </div>
 
@@ -59,7 +58,7 @@
                     <div class="eight columns">
 
                         <!-- Portfolio Navigation -->
-                        <section id="options">
+                        @*<section id="options">
 
                             <ul id="filters" class="option-set right" data-option-key="filter">
                                 <li><a href="#filter" data-option-value="*" class="button small selected">Show All</a></li>
@@ -70,7 +69,7 @@
                                 <li><a href="#filter" data-option-value=".print" class="button small">Print</a></li>
                             </ul>
 
-                        </section>
+                        </section>*@
                         <!-- End Portfolio Navigation -->
 
                     </div>

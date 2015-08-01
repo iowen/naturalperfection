@@ -310,7 +310,7 @@
     @RenderBody()
     <!-- Region 9 Wrap -->
 
-    <div class="container region9wrap">
+   @* <div class="container region9wrap">
 
         <!-- Bottom Content -->
         <div class="row content_bottom">
@@ -319,14 +319,14 @@
 
             <div class="eight columns">
 
-                <h2>Sign up for our newsletter</h2>
-                <p>Keep up-to-date with the latest news and updates by subscribing to our newsletter.</p>
+                <h2>&nbsp;</h2>
+                @*<p>Keep up-to-date with the latest news and updates by subscribing to our newsletter.</p>
 
             </div>
 
             <!-- // // // // // // // // // // -->
 
-            <div class="four columns">
+            @*<div class="four columns">
                 <div class="row collapse newsletter-input">
                     <div class="eight mobile-three columns">
                         <input type="text" placeholder="Enter your email address" />
@@ -344,12 +344,12 @@
         <!-- Footer -->
         <div class="row footer">
 
-      
+
 
         </div>
         <!-- End Footer -->
 
-    </div>
+    </div>*@
 
     <!-- End Region 9 Wrap -->
     <!-- Region 10 Wrap -->
@@ -363,7 +363,7 @@
 
             <div class="six columns">
 
-                <p class="copyright">© 2012 TouchM by 4GraFx. All rights reserved</p>
+                <p class="copyright">&copy; @DateTime.Now.Year Natural Perfection. All rights reserved</p>
 
             </div>
 
@@ -372,11 +372,22 @@
             <div class="six columns">
 
                 <ul class="link-list">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Pages</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Porfolio</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="@Request.Url.GetLeftPart(UriPartial.Authority)">Home</a></li>
+@{
+    if (Request.IsAuthenticated)
+    {
+        <li><a href="@Request.Url.GetLeftPart(UriPartial.Authority)/Account">Account</a></li>
+
+    }
+    if (User.IsInRole("SuperAdmin"))
+    {
+        <li><a href="@Request.Url.GetLeftPart(UriPartial.Authority)/Administrator">Admin</a></li>
+
+    }
+}
+                    <li><a href="@Request.Url.GetLeftPart(UriPartial.Authority)/Portfolio">Portfolio</a></li>
+                    <li><a href="@Request.Url.GetLeftPart(UriPartial.Authority)/About">About</a></li>
+                    <li><a href="@Request.Url.GetLeftPart(UriPartial.Authority)/Contact">Contact</a></li>
                 </ul>
 
             </div>

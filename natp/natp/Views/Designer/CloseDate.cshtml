@@ -69,14 +69,14 @@
 
             <div class="row">
                 <div class="twelve columns">
-                    <div class="row collapse top_search">
+                    @*<div class="row collapse top_search">
                         <div class="ten mobile-three columns">
                             <input type="text" placeholder="Enter search terms" />
                         </div>
                         <div class="two mobile-one columns">
                             <a href="#" class="button icon-search"></a>
                         </div>
-                    </div>
+                    </div>*@
                 </div>
             </div>
 
@@ -136,11 +136,11 @@
     function saveClosedDates()
     {
         alert("s");
-        var datesToSave =  [];
+         datesToSave =  [];
         $(".cDates").each(function () {
             datesToSave.push( $(this).val());
         });
-        var datesJson = JSON.stringify(datesToSave);
+         datesJson = JSON.stringify(datesToSave);
 
         $.post('@Url.Action("SetCloseDates", "Designer", new { })', { DatesToClose: datesJson }, function (data, status) {
             // alert(data.Status);
@@ -171,20 +171,23 @@
     function removeDate(dateToRemove)
     {
        // alert("remove");
-        var dr = new moment(dateToRemove);
+         dr = new moment(dateToRemove);
         $('#datepicker').multiDatesPicker('removeDates', dr.toDate());
         updateDatesList();
     }
 
     function updateDatesList()
     {
-        var sdates = $('#datepicker').multiDatesPicker('getDates');
-     //   alert(sdates);
-
-        var sArray = sdates.toString().split(",");
+        outHtml = "";
+         sdates = $('#datepicker').multiDatesPicker('getDates');
+         //alert(sdates.length);
+         if (sdates.length == 0) {
+             $("#closedList").html(outHtml);
+             return;
+         }
+         sArray = sdates.toString().split(",");
       //  alert(sArray);
 
-        var outHtml = "";
 
         for (var i = 0; i< sArray.length; i++)
         {
@@ -197,7 +200,7 @@
 
     for (var i = 0; i < alreadyJson.length; i++)
     {
-        var date = new moment(alreadyJson[i]);
+         date = new moment(alreadyJson[i]);
         alreadyClosed.push(date.toDate());
     }
     $("#datepicker").multiDatesPicker({
@@ -205,11 +208,12 @@
         minDate: 1,
         numberOfMonths: 3,
         showButtonPanel: true,
-        addDates: alreadyClosed,
         onSelect: function (dateText, inst) {
             canCloseDate(dateText);
         }
     });
+    if (alreadyJson.length > 0)
+        $('#datepicker').multiDatesPicker('addDates', alreadyClosed);
     updateDatesList();
 </script>
 

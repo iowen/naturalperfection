@@ -1,5 +1,9 @@
 ﻿
-
+<script>
+    function viewClient(cId) {
+        window.location.href = "@Request.Url.GetLeftPart(UriPartial.Authority)/Client/View/" + cId;
+    }
+</script>
 <!-- Region 3 Wrap -->
 
 <div class="container region3wrap">
@@ -22,14 +26,14 @@
 
             <div class="row">
                 <div class="twelve columns">
-                    <div class="row collapse top_search">
+                    @*<div class="row collapse top_search">
                         <div class="ten mobile-three columns">
                             <input type="text" placeholder="Enter search terms" />
                         </div>
                         <div class="two mobile-one columns">
                             <a href="#" class="button icon-search"></a>
                         </div>
-                    </div>
+                    </div>*@
                 </div>
             </div>
 
@@ -71,6 +75,7 @@
                 <table id="example" class="display" cellspacing="0" width="100%">
                     <thead>
                         <tr>
+                            <th style="display:none;"></th>
                             <th>First name</th>
                             <th>Last name</th>
 
@@ -82,6 +87,7 @@
                             foreach (var c in ViewBag.clients)
                             {
                                 <tr>
+                                    <td style="display:none;">@c.ClientId</td>
                                     <td>@c.Account.FirstName</td>
                                     <td>@c.Account.LastName</td>
                                 </tr>
@@ -103,7 +109,10 @@
                         }]
                     });
 
-
+                    $('#example tbody').on('click', 'tr', function () {
+                        cId = $('td', this).eq(0).text();
+                        viewClient(cId);
+                    });
                 </script>
 
         

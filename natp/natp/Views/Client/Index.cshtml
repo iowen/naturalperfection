@@ -34,14 +34,14 @@
 
             <div class="row">
                 <div class="twelve columns">
-                    <div class="row collapse top_search">
+                    @*<div class="row collapse top_search">
                         <div class="ten mobile-three columns">
                             <input type="text" placeholder="Enter search terms" />
                         </div>
                         <div class="two mobile-one columns">
                             <a href="#" class="button icon-search"></a>
                         </div>
-                    </div>
+                    </div>*@
                 </div>
             </div>
 
@@ -118,27 +118,18 @@
             <div class="row">
                 <div class="twelve columns">
                     <div class="six columns">
-                        <h3>Alerts</h3>
+                        <h3>Pending</h3>
+                        <ul class="sidebar-list">
+                            @{
+                                foreach (var a in ViewBag.pendingAppointments)
+                                {
 
-                        <div class="alert-box">
-                            This is a standard alert.
-                            <a href="" class="close">&times;</a>
-                        </div>
+                                    @Html.Raw("<li>" + a.AppointmentTimeUtc.ToLocalTime().ToString("MMMM dd, yyyy h:mm tt") + "</li>");
 
-                        <div class="alert-box success">
-                            This is a success alert.
-                            <a href="" class="close">&times;</a>
-                        </div>
+                                }
+                            }
+                        </ul>
 
-                        <div class="alert-box alert">
-                            This is an alert.
-                            <a href="" class="close">&times;</a>
-                        </div>
-
-                        <div class="alert-box secondary">
-                            This is a secondary alert.
-                            <a href="" class="close">&times;</a>
-                        </div>
 
                     </div>
 
@@ -172,32 +163,16 @@
 
                         <h3>Menu</h3>
 
-                        <ul class="toggle-view">
+                        <ul class="side-nav">
 
                             <li>
-                                <button onclick="BookButtonCLicked();">Book Appointment</button>
+                                <a href="javascript:void(0)" onclick="BookButtonCLicked();">Book Appointment</a>
                             </li>
                             <li>
-                                <button onclick="HistoryButtonCLicked();">Appointment History</button>
+                                <a href="javascript:void(0)" onclick="HistoryButtonCLicked();">Appointment History</a>
                             </li>
 
 
-                        </ul>
-
-                    </div>
-                    <!-- End Sidebar Widget -->
-                    <!-- Sidebar Widget -->
-                    <div class="sidebar-widget">
-                        <h3>Pending</h3>
-                        <ul class="sidebar-list">
-                            @{
-                                foreach (var a in ViewBag.pendingAppointments)
-                                {
-
-                                    @Html.Raw("<li>" + a.AppointmentTimeUtc.ToLocalTime().ToString("MMMM dd, yyyy h:mm tt") + "</li>");
-
-                                }
-                            }
                         </ul>
 
                     </div>

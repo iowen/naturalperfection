@@ -14,41 +14,25 @@
         <div class="fluid_container">
 
             <div class="camera_wrap" id="camera_wrap_1">
-                <div data-thumb="Images/images/sliders/camera/thumbs/bridge.jpg" data-src="Images/images/sliders/camera/bridge.jpg">
+                <div data-thumb="/Images/images/sliders/camera/thumbs/hair_thumb.jpg" data-src="/Images/images/sliders/camera/hair.jpg">
                     <div class="camera_caption fadeFromBottom">
-                        Camera is a responsive/adaptive slideshow. <em>Try to resize the browser window</em>
+                        Avoid the hassle. <em>Book appointments online.</em>
                     </div>
                 </div>
 
-                <div data-thumb="Images/images/sliders/camera/thumbs/leaf.jpg" data-src="Images/images/sliders/camera/leaf.jpg">
+                <div data-thumb="/Images/images/sliders/camera/thumbs/products_thumb.jpg" data-src="/Images/images/sliders/camera/products.jpg">
                     <div class="camera_caption fadeFromBottom">
-                        It uses a light version of jQuery mobile, <em>navigate the slides by swiping with your fingers</em>
+                        Our Product line is coming soon. <em> Made to keep you naturally beautiful.</em>
                     </div>
                 </div>
 
-                <div data-thumb="Images/images/sliders/camera/thumbs/road.jpg" data-src="Images/images/sliders/camera/road.jpg">
+                <div data-thumb="/Images/images/sliders/camera/thumbs/salonblackhair_thumb.jpg" data-src="/Images/images/sliders/camera/salonblackhair.jpg">
                     <div class="camera_caption fadeFromBottom">
-                        <em>It's completely free</em> (even if a donation is appreciated)
+                        <em>Contact us for group appointments</em> (such as weddings and prom)
                     </div>
                 </div>
 
-                <div data-thumb="Images/images/sliders/camera/thumbs/sea.jpg" data-src="Images/images/sliders/camera/sea.jpg">
-                    <div class="camera_caption fadeFromBottom">
-                        Camera slideshow provides many options <em>to customize your project</em> as more as possible
-                    </div>
-                </div>
-
-                <div data-thumb="Images/images/sliders/camera/thumbs/shelter.jpg" data-src="Images/images/sliders/camera/shelter.jpg">
-                    <div class="camera_caption fadeFromBottom">
-                        It supports captions, HTML elements and videos and <em>it's validated in HTML5</em> (<a href="http://validator.w3.org/check?uri=http%3A%2F%2Fwww.pixedelic.com%2Fplugins%2Fcamera%2F&amp;charset=%28detect+automatically%29&amp;doctype=Inline&amp;group=0&amp;user-agent=W3C_Validator%2F1.2" target="_blank">have a look</a>)
-                    </div>
-                </div>
-
-                <div data-thumb="Images/images/sliders/camera/thumbs/tree.jpg" data-src="Images/images/sliders/camera/tree.jpg">
-                    <div class="camera_caption fadeFromBottom">
-                        Different color skins and layouts available, <em>fullscreen ready too</em>
-                    </div>
-                </div>
+               
             </div>
 
         </div>
@@ -63,7 +47,7 @@
 
         <div class="twelve columns">
 
-            <h2>We create custom-built, marketing-driven website solutions and online environments that ensure your brand delivers on form and functionality.</h2>
+            <h2>Simply Amazing.</h2>
 
         </div>
 
@@ -93,10 +77,10 @@
                 <div class="four columns">
 
                     <div class="service">
-                        <a href="#">
-                            <div class="service-icon"><img src="Images/images/icons/service-responsive.png" width="120" height="60" alt="Modern"></div>
-                            <h2 class="service-main">Fully Responsive</h2>
-                            <p class="service-sub">Accusantium et doloremque veritatis architecto, eaque ipsa quae ab illo inventore veritatis perspiciatis.</p>
+                        <a href="javascript:void(0)">
+                            <div class="service-icon"><img src="~/Images/images/icons/appointment_icon_white.png" width="120" height="60" alt="Modern"></div>
+                            <h2 class="service-main">Book Appointments</h2>
+                            <p class="service-sub">Register with us to take advantage of booking appointments online.</p>
                         </a>
                     </div>
 
@@ -107,10 +91,10 @@
                 <div class="four columns">
 
                     <div class="service">
-                        <a href="#">
-                            <div class="service-icon"><img src="Images/images/icons/service-touch.png" width="120" height="60" alt="Modern"></div>
-                            <h2 class="service-main">Touch Support</h2>
-                            <p class="service-sub">Inventore veritatis et quasi architecto beatae dicta sed ut perspiciatis unde omnis iste natus laudantium.</p>
+                        <a href="javascript:void(0)">
+                            <div class="service-icon"><img src="~/Images/images/icons/cart-15-xxl.png" width="120" height="60" alt="Modern"></div>
+                            <h2 class="service-main">Products Coming Soon</h2>
+                            <p class="service-sub">Our product line will be available soon.</p>
                         </a>
                     </div>
 
@@ -121,10 +105,10 @@
                 <div class="four columns">
 
                     <div class="service">
-                        <a href="#">
-                            <div class="service-icon"><img src="Images/images/icons/service-customization.png" width="120" height="60" alt="Modern"></div>
-                            <h2 class="service-main">Easy Customization</h2>
-                            <p class="service-sub">Etiam eget mi enim, non ultricies nisi voluptatem, illo inventore veritatis et quasi architecto beatae explicabo.</p>
+                        <a href="javascript:void(0)">
+                            <div class="service-icon"><img src="~/Images/images/icons/video.png" width="120" height="60" alt="Modern"></div>
+                            <h2 class="service-main">Tutorials Coming Soon</h2>
+                            <p class="service-sub">We will be adding tutorials to educate users on best practices for maintiaing their hair.</p>
                         </a>
                     </div>
 
@@ -146,7 +130,7 @@
 
                 <div class="twelve columns">
 
-                    <h3>Recent Work</h3>
+                    <h3>Recent Uploads</h3>
 
                     <!-- // // // // // // // // // // -->
                     <div class="list_carousel">
@@ -156,212 +140,38 @@
                         </div>
                         <div class="clearfix"></div>
                         <ul id="carousel-works">
-                            <li>
-                                <div class="work-item contentHover">
+                            @{
+                                foreach (var i in ViewBag.featuredPhotoAlbums)
+                                {
+                                    <li>
+                                        <div class="work-item contentHover">
 
-                                    <div class="content">
-                                        <div class="work-item-image">
-                                            <img src="Images/images/works/1.jpg" alt="" />
+                                            <div class="content">
+                                                <div class="work-item-image">
+                                                    <img src="@i.PhotoAlbumItems[0].Photo.Location" alt="" style="height:225px; width:225px;" />
+                                                </div>
+
+                                                <div class="work-item-content">
+                                                    <h4><a href="/Photo/Album/@i.PhotoAlbumId">@i.Title</a></h4>
+                                                    <p>@i.Description</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="hover-content">
+                                                <h3><a href="/Photo/Album/@i.PhotoAlbumId">@i.Title</a></h3>
+                                                <p>@i.Description</p>
+                                                <div class="hover-links">
+                                                    <a href="/Photo/Album/@i.PhotoAlbumId" class="view-item"><span>&nbsp;</span></a>
+                                                    <a class="titan-lb view-image" href="@i.PhotoAlbumItems[0].Photo.Location" title="@i.Title"><span>&nbsp;</span></a>
+                                                </div>
+                                            </div>
+
                                         </div>
+                                    </li>
 
-                                        <div class="work-item-content">
-                                            <h4><a href="#">Skyde</a></h4>
-                                            <p>Travel far away to a old pirate space station.</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="hover-content">
-                                        <h3><a href="#">Skyde</a></h3>
-                                        <p>Inventore veritatis et quasi architecto beatae dicta sed ut perspiciatis unde omnis iste natus laudantium.</p>
-                                        <div class="hover-links">
-                                            <a href="single-project.html" class="view-item"><span>&nbsp;</span></a>
-                                            <a class="titan-lb view-image" href="Images/images/works/1.jpg" title="Skyde - Travel far away to a old pirate space station."><span>&nbsp;</span></a>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </li>
-
-                            <li>
-                                <div class="work-item contentHover">
-
-                                    <div class="content">
-                                        <div class="work-item-image">
-                                            <img src="Images/images/works/2.jpg" alt="" />
-                                        </div>
-
-                                        <div class="work-item-content">
-                                            <h4><a href="#">Materialistic</a></h4>
-                                            <p>Another beatiful work done in a fast motion.</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="hover-content">
-                                        <h3><a href="#">Materialistic</a></h3>
-                                        <p>Inventore veritatis et quasi architecto beatae dicta sed ut perspiciatis unde omnis iste natus laudantium.</p>
-                                        <div class="hover-links">
-                                            <a href="single-project.html" class="view-item"><span>&nbsp;</span></a>
-                                            <a class="titan-lb view-image" href="Images/images/works/2.jpg" title="Materialistic - Inventore veritatis et quasi architecto beatae."><span>&nbsp;</span></a>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </li>
-
-                            <li>
-                                <div class="work-item contentHover">
-
-                                    <div class="content">
-                                        <div class="work-item-image">
-                                            <img src="Images/images/works/3.jpg" alt="" />
-                                        </div>
-
-                                        <div class="work-item-content">
-                                            <h4><a href="#">Shadowgate Entrance</a></h4>
-                                            <p>Start moving and never look back you will.</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="hover-content">
-                                        <h3><a href="#">Shadowgate Entrance</a></h3>
-                                        <p>Inventore veritatis et quasi architecto beatae dicta sed ut perspiciatis unde omnis iste natus laudantium.</p>
-                                        <div class="hover-links">
-                                            <a href="single-project.html" class="view-item"><span>&nbsp;</span></a>
-                                            <a class="titan-lb view-image" href="Images/images/works/3.jpg" title="Shadowgate Entrance - Inventore veritatis et quasi architecto beatae dicta sed ut perspiciatis unde omnis iste natus laudantium."><span>&nbsp;</span></a>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </li>
-
-                            <li>
-                                <div class="work-item contentHover">
-
-                                    <div class="content">
-                                        <div class="work-item-image">
-                                            <img src="Images/images/works/4.jpg" alt="" />
-                                        </div>
-
-                                        <div class="work-item-content">
-                                            <h4><a href="#">Where The Forgotten</a></h4>
-                                            <p>The cold sky stands still, there is no wind...</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="hover-content">
-                                        <h3><a href="#">Where The Forgotten</a></h3>
-                                        <p>Inventore veritatis et quasi architecto beatae dicta sed ut perspiciatis unde omnis iste natus laudantium.</p>
-                                        <div class="hover-links">
-                                            <a href="single-project.html" class="view-item"><span>&nbsp;</span></a>
-                                            <a class="titan-lb view-image" href="Images/images/works/4.jpg" title="Where The Forgotten - Inventore veritatis et quasi architecto beatae dicta sed ut perspiciatis unde omnis iste natus laudantium."><span>&nbsp;</span></a>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </li>
-                            <li>
-                                <div class="work-item contentHover">
-
-                                    <div class="content">
-                                        <div class="work-item-image">
-                                            <img src="Images/images/works/5.jpg" alt="" />
-                                        </div>
-
-                                        <div class="work-item-content">
-                                            <h4><a href="#">Skyde</a></h4>
-                                            <p>Travel far away to a pirate space station.</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="hover-content">
-                                        <h3><a href="#">Skyde</a></h3>
-                                        <p>Inventore veritatis et quasi architecto beatae dicta sed ut perspiciatis unde omnis iste natus laudantium.</p>
-                                        <div class="hover-links">
-                                            <a href="#" class="view-item"><span>&nbsp;</span></a>
-                                            <a href="#" class="view-image"><span>&nbsp;</span></a>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </li>
-
-                            <li>
-                                <div class="work-item contentHover">
-
-                                    <div class="content">
-                                        <div class="work-item-image">
-                                            <img src="Images/images/works/6.jpg" alt="" />
-                                        </div>
-
-                                        <div class="work-item-content">
-                                            <h4><a href="#">Materialistic</a></h4>
-                                            <p>Another beatiful work done in a fast motion.</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="hover-content">
-                                        <h3><a href="#">Materialistic</a></h3>
-                                        <p>Inventore veritatis et quasi architecto beatae dicta sed ut perspiciatis unde omnis iste natus laudantium.</p>
-                                        <div class="hover-links">
-                                            <a href="#" class="view-item"><span>&nbsp;</span></a>
-                                            <a href="#" class="view-image"><span>&nbsp;</span></a>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </li>
-
-                            <li>
-                                <div class="work-item contentHover">
-
-                                    <div class="content">
-                                        <div class="work-item-image">
-                                            <img src="Images/images/works/7.jpg" alt="" />
-                                        </div>
-
-                                        <div class="work-item-content">
-                                            <h4><a href="#">Shadowgate Entrance</a></h4>
-                                            <p>Start moving and never look back you will.</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="hover-content">
-                                        <h3><a href="#">Shadowgate Entrance</a></h3>
-                                        <p>Inventore veritatis et quasi architecto beatae dicta sed ut perspiciatis unde omnis iste natus laudantium.</p>
-                                        <div class="hover-links">
-                                            <a href="#" class="view-item"><span>&nbsp;</span></a>
-                                            <a href="#" class="view-image"><span>&nbsp;</span></a>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </li>
-
-                            <li>
-                                <div class="work-item contentHover">
-
-                                    <div class="content">
-                                        <div class="work-item-image">
-                                            <img src="Images/images/works/8.jpg" alt="" />
-                                        </div>
-
-                                        <div class="work-item-content">
-                                            <h4><a href="#">Where The Forgotten</a></h4>
-                                            <p>The cold sky stands still, there is no wind...</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="hover-content">
-                                        <h3><a href="#">Where The Forgotten</a></h3>
-                                        <p>Inventore veritatis et quasi architecto beatae dicta sed ut perspiciatis unde omnis iste natus laudantium.</p>
-                                        <div class="hover-links">
-                                            <a href="#" class="view-item"><span>&nbsp;</span></a>
-                                            <a href="#" class="view-image"><span>&nbsp;</span></a>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </li>
+                                }
+                            }
+                           
 
                         </ul>
                         <div class="clearfix"></div>
@@ -373,13 +183,13 @@
             </div>
             <!-- End Recent Work -->
 
-            <div class="row">
+            @*<div class="row">
                 <div class="twelve columns">
                     <hr />
                 </div>
-            </div>
+            </div>*@
 
-            <!-- Our Partners -->
+            @*<!-- Our Partners -->
             <div class="row">
 
                 <div class="twelve columns">
@@ -396,7 +206,7 @@
                 </div>
 
             </div>
-            <!-- End Our Partners -->
+            <!-- End Our Partners -->*@
 
         </div>
         <!-- End Main Content ( Middle Content) -->

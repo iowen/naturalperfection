@@ -201,6 +201,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\GlobalVariables.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MediaGen.cs" />
@@ -287,8 +288,10 @@
     <Content Include="Images\images\foundation\orbit\rotator-black.png" />
     <Content Include="Images\images\foundation\orbit\timer-black.png" />
     <Content Include="Images\images\icons\address_icon.png" />
+    <Content Include="Images\images\icons\appointment_icon_white.png" />
     <Content Include="Images\images\icons\avatar-big.png" />
     <Content Include="Images\images\icons\avatar.png" />
+    <Content Include="Images\images\icons\cart-15-xxl.png" />
     <Content Include="Images\images\icons\email_icon.png" />
     <Content Include="Images\images\icons\item-image.png" />
     <Content Include="Images\images\icons\item-info.png" />
@@ -301,6 +304,7 @@
     <Content Include="Images\images\icons\service-modern.png" />
     <Content Include="Images\images\icons\service-responsive.png" />
     <Content Include="Images\images\icons\service-touch.png" />
+    <Content Include="Images\images\icons\video.png" />
     <Content Include="Images\images\icon_top.png" />
     <Content Include="Images\images\left_pagination.png" />
     <Content Include="Images\images\loading.gif" />
@@ -317,15 +321,21 @@
     <Content Include="Images\images\select_arrow.png" />
     <Content Include="Images\images\sliders\camera\big_bunny_fake.jpg" />
     <Content Include="Images\images\sliders\camera\bridge.jpg" />
+    <Content Include="Images\images\sliders\camera\hair.jpg" />
     <Content Include="Images\images\sliders\camera\leaf.jpg" />
+    <Content Include="Images\images\sliders\camera\products.jpg" />
     <Content Include="Images\images\sliders\camera\road.jpg" />
+    <Content Include="Images\images\sliders\camera\salonblackhair.jpg" />
     <Content Include="Images\images\sliders\camera\sea.jpg" />
     <Content Include="Images\images\sliders\camera\shelter.jpg" />
     <Content Include="Images\images\sliders\camera\thumbs\big_bunny_fake.jpg" />
     <Content Include="Images\images\sliders\camera\thumbs\bridge.jpg" />
+    <Content Include="Images\images\sliders\camera\thumbs\hair_thumb.jpg" />
     <Content Include="Images\images\sliders\camera\thumbs\header_bg.png" />
     <Content Include="Images\images\sliders\camera\thumbs\leaf.jpg" />
+    <Content Include="Images\images\sliders\camera\thumbs\products_thumb.jpg" />
     <Content Include="Images\images\sliders\camera\thumbs\road.jpg" />
+    <Content Include="Images\images\sliders\camera\thumbs\salonblackhair_thumb.jpg" />
     <Content Include="Images\images\sliders\camera\thumbs\sea.jpg" />
     <Content Include="Images\images\sliders\camera\thumbs\shelter.jpg" />
     <Content Include="Images\images\sliders\camera\thumbs\tree.jpg" />
@@ -601,6 +611,7 @@
     <Content Include="Views\Register\Index.cshtml" />
     <Content Include="Views\About\Index.cshtml" />
     <Content Include="Views\Register\_RegisterPartial.cshtml" />
+    <Content Include="Views\Client\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\DesignerSchedules\" />

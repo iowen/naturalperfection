@@ -29,13 +29,20 @@
     }
     function setAppointment(clientId,designerId,time,offset)
     {
-        alert(clientId);
+        // alert(clientId);
         //Ajax call here
-        $.post('@Url.Action("SetAppointment", "Appointment", new { })', {ClientId: clientId, DesignerId: designerId, Time: time, Offset: offset}, function (data, status) {
-            if( data.Status == "Success")
-            {
-                window.location.href = '@Url.Action("Index", "Home", new { })';            }
-        });    
+        result = window.confirm("Reserve "+ time+" ?");
+        if(result)
+        {
+            $.post('@Url.Action("SetAppointment", "Appointment", new { })', {ClientId: clientId, DesignerId: designerId, Time: time, Offset: offset}, function (data, status) {
+                if( data.Status == "Success")
+                {
+                    window.location.href = '@Url.Action("Index", "Account", new { })';            }
+                else{
+                    alert("an error occured");
+                }
+            });  
+        }
     }
 
     function GetAvailableTimes()
@@ -105,14 +112,14 @@
 
             <div class="row">
                 <div class="twelve columns">
-                    <div class="row collapse top_search">
+                    @*<div class="row collapse top_search">
                         <div class="ten mobile-three columns">
                             <input type="text" placeholder="Enter search terms" />
                         </div>
                         <div class="two mobile-one columns">
                             <a href="#" class="button icon-search"></a>
                         </div>
-                    </div>
+                    </div>*@
                 </div>
             </div>
 
@@ -183,7 +190,7 @@
 
                 <h3>Date</h3>
                 <p><input type="text" id="datepicker" readonly></p>
-                <button onclick="GetAvailableTimes();">Get Available Times</button>
+                <button onclick="GetAvailableTimes();" class="button radius">Get Available Times</button>
                 <script>
 
                     $("#datepicker").datepicker({

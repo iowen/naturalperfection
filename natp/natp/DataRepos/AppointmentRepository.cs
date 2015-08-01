@@ -90,6 +90,22 @@ namespace natp.DataRepos
             return result;
         }
 
+        public bool canScheduleAppointmentForDesigner(int designer, DateTime date)
+        {
+            bool result = false;
+            try
+            {
+                var exists = db.Appointments.Where(a => a.Designerd == designer && a.AppointmentTimeUtc.Date == date.Date && a.IsCanceled == false).Any();
+                result = !exists;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                result = false;
+            }
+            return result;
+        }
+
         public Appointment getAppointment(int id)
         {
             var result = new Appointment();
