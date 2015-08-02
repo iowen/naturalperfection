@@ -1,0 +1,197 @@
+﻿
+@{
+    ViewBag.Title = "Schedule";
+}
+<script>
+    function ShowEditSchedule()
+    {
+        $("#sch").show();
+    }
+
+    function CloseEditSchedule()
+    {
+        $("#sch").hide();
+    }
+</script>
+
+
+<script>
+    function SaveSchedule()
+    {
+        var days = "";
+        if ($("#sunChk").is(':checked')) {
+            days += "sun;";
+        }
+        if ($("#monChk").is(':checked')) {
+            days += "mon;";
+        }
+        if ($("#tueChk").is(':checked')) {
+            days += "tue;";
+        }
+        if ($("#wedChk").is(':checked')) {
+            days += "wed;";
+        }
+        if ($("#thuChk").is(':checked')) {
+            days += "thu;";
+        }
+        if ($("#friChk").is(':checked')) {
+            days += "fri;";
+        }
+        if ($("#satChk").is(':checked')) {
+            days += "sat;";
+        }
+        $.post('@Url.Action("SetSchedule", "Designer", new { })', { Days: days, DesignerId: @ViewBag.designer.DesignerId, StartHour: $("#startHour").val(), StartMin: $("#startMin").val(), StartTod: $("#startTod").val(), EndHour: $("#endHour").val(), EndMin: $("#endMin").val(), EndTod: $("#endTod").val(), Interval: $("#interval").val() }, function (data, status) {
+            if (data.Status == "Success") {
+                window.location.href = '@Url.Action("Schedule", "Designer", new { })';
+            }
+        });
+    }
+</script>
+
+<!-- Region 3 Wrap -->
+
+<div class="container region3wrap">
+
+
+    <!-- Content Top -->
+    <div class="row content_top">
+
+        <div class="nine columns">
+
+            <ul class="breadcrumbs">
+                <li><a href="@Request.Url.GetLeftPart(UriPartial.Authority)">Home</a></li>
+                <li><a href="@Request.Url.GetLeftPart(UriPartial.Authority)/Account">Profile</a></li>
+                <li class="current"><a href="javascript:void(0)">Schedule</a></li>
+            </ul>
+
+        </div>
+
+        <div class="three columns">
+
+            <div class="row">
+                <div class="twelve columns">
+                    @*<div class="row collapse top_search">
+                        <div class="ten mobile-three columns">
+                            <input type="text" placeholder="Enter search terms" />
+                        </div>
+                        <div class="two mobile-one columns">
+                            <a href="#" class="button icon-search"></a>
+                        </div>
+                    </div>*@
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- End Content Top -->
+
+</div>
+
+<!-- End Region 3 Wrap -->
+
+<!-- Region 4 Wrap -->
+
+<div class="container region4wrap">
+
+    <div class="row maincontent">
+
+
+        <div class="twelve columns">
+
+            <div class="page_title">
+
+                <div class="row">
+
+                    <div class="twelve columns">
+                        <h1>Schedule</h1>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="four columns">
+
+            <h3>Menu</h3>
+
+            <ul class="side-nav">
+                <li><a href="javascript:void(0)" onclick="ShowEditSchedule();">Edit</a></li>
+            </ul>
+
+        </div>
+
+        <div class="eight columns bottom20">
+            <div id="sch" style="display:none" class="row">
+                <h3>Edit Schedule</h3>
+
+
+                <div class="twelve columns">
+                    <div class="row">
+
+                        <ul id="dow" class="inline-list">
+                            <li><input type="checkbox" id="sunChk" />Sunday</li>
+                            <li><input type="checkbox" id="monChk" />Monday</li>
+                            <li><input type="checkbox" id="tueChk" />Tuesday</li>
+                            <li><input type="checkbox" id="wedChk" />Wednesday</li>
+                            <li><input type="checkbox" id="thuChk" />Thursday</li>
+                            <li><input type="checkbox" id="friChk" />Friday</li>
+                            <li><input type="checkbox" id="satChk" />Saturday</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="twelve columns">
+
+                            <div class="four columns">
+                                <input type="text" id="startHour" />
+                            </div>
+                            <div class="four columns">
+                                <input type="text" id="startMin" />
+                            </div>
+                            <div class="four columns">
+                                <select id="startTod"><option value="am">am</option><option value="pm">pm</option></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="twelve columns">
+
+                            <div class="four columns">
+                                <input type="text" id="endHour" /> 
+                            </div>
+                            <div class="four columns">
+                                <input type="text" id="endMin" /> 
+                            </div>
+                            <div class="four columns">
+    <select id="endTod"><option value="am">am</option><option value="pm">pm</option></select>
+                                </div>
+</div>
+                    </div>
+                    <div class="row">
+                        <div class="four columns">
+
+                            <select id="interval"><option value="15">15</option><option value="30">30</option></select>
+                            </div>
+                        </div>
+                    <button onclick="SaveSchedule();">Save</button>
+                    <button onclick="CloseEditSchedule();">Cancel</button>
+                </div>
+
+                        </div>
+
+            <div id="ws">
+                @Html.Partial("_WorkSchedulePartial", new natp.Models.WorkScheduleModel() { mon = ViewBag.workScheduleModel.mon, tue = ViewBag.workScheduleModel.tue, wed = ViewBag.workScheduleModel.wed, thu = ViewBag.workScheduleModel.thu, fri = ViewBag.workScheduleModel.fri, sat = ViewBag.workScheduleModel.sat, sun = ViewBag.workScheduleModel.sun })
+            </div>
+
+
+
+                </div>
+
+            </div>
+
+</div>
+
+<!-- End Region 4 Wrap -->

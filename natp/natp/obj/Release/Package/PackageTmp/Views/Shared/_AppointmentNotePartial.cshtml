@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNet.Identity
+@model natp.Models.AppointmentNoteViewModel
+<h3>Notes (@Html.Raw(Model.Notes.Count()))</h3>
+<!-- Comments Lists -->
+<ol id ="nList" class="comments-list">
+    @{
+        foreach (var c in Model.Notes.Reverse())
+        {
+
+            <li class="comment" style="width:100%;">
+
+                <div class="comment-meta">
+
+                    <p class="date">@Html.Raw(c.CreatedUtc.ToLocalTime().ToString("MMMM dd, yyyy h:mm tt"))</p>
+
+                </div>
+                <br />
+                <div class="comment-body" style="clear:both">
+
+                    <p>@Html.Raw(c.Text)</p>
+
+                </div>
+            </li>
+         
+        }
+}
+    <!-- Comment -->
+</ol>
+<br />
+<div id="nHolder" class="holder" style="clear:both;"></div>
+<!-- Comments Lists -->
+<script>
+
+    $('#nHolder').jPages({
+        containerID: "nList",
+        perPage: 3,
+        keyBrowse: true,
+        scrollBrowse: true
+    });
+</script>

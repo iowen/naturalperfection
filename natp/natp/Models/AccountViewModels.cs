@@ -33,6 +33,7 @@ namespace natp.Models
         public int DesignerId { get; set; }
         public string Time { get; set; }
         public float Offset { get; set; }
+        public int IsDesigner { get; set; }
     }
 
     public class AppointmentViewModel
@@ -153,7 +154,19 @@ namespace natp.Models
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
     }
+    public class AccountUpdateModel
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public int AccountId { get; set; }
+    }
 
+    public class AccountUpdatePasswordModel
+    {
+        public string OldPassword { get; set; }
+        public string NewPassword { get; set; }
+        public int AccountId { get; set; }
+    }
     public class RegisterViewModel
     {
         [Required]

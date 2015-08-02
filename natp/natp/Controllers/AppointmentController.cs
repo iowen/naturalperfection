@@ -7,6 +7,8 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using natp.Models;
 using System.Threading;
+using System.Web.Hosting;
+using System.Threading.Tasks;
 
 namespace natp.Controllers
 {
@@ -18,28 +20,43 @@ namespace natp.Controllers
         {
             return View();
         }
-        [Authorize(Roles = "SuperAdmin, Client")]
+
+
+        [Authorize(Roles = "Designer")]
+        public  ActionResult BookClient(int clientId)
+        {
+            var cRep = new ClientRepository(new npDataContext());
+            var dRep = new DesignerRepository(new npDataContext());
+            var c = cRep.getClient(clientId);
+            var d = dRep.getDesignerByAccount(int.Parse(User.Identity.GetUserId()));
+            ClosedDatesModel dresult = Newtonsoft.Json.JsonConvert.DeserializeObject<ClosedDatesModel>(System.IO.File.ReadAllText(HostingEnvironment.MapPath(d.WorkSchedules.First().ClosedDatesLocation)));
+            ViewBag.closedDates = dresult.closedDates;
+            ViewBag.client = c;
+            ViewBag.isDesigner = 1;
+            return View("Book");
+        }
+
+        [Authorize(Roles = "Client")]
         public ActionResult Book()
         {
             var cRep = new ClientRepository(new npDataContext());
             var dRep = new DesignerRepository(new npDataContext());
             var c = cRep.getClientByAccount(int.Parse(User.Identity.GetUserId()));
             var d = dRep.getDesigner(c.DesignerId);
-            ClosedDatesModel dresult = Newtonsoft.Json.JsonConvert.DeserializeObject<ClosedDatesModel>(System.IO.File.ReadAllText(d.WorkSchedules.First().ClosedDatesLocation));
+            ClosedDatesModel dresult = Newtonsoft.Json.JsonConvert.DeserializeObject<ClosedDatesModel>(System.IO.File.ReadAllText(HostingEnvironment.MapPath(d.WorkSchedules.First().ClosedDatesLocation)));
             ViewBag.closedDates = dresult.closedDates;
             ViewBag.client = c;
+            ViewBag.isDesigner = 0;
             return View();
         }
-
-        [AllowAnonymous]
         public ActionResult GetTimes(int dId, string date, float offset)
         {
 
             var dRepo = new DesignerRepository(new npDataContext());
             var aRepo = new AppointmentRepository(new npDataContext());
             var d = dRepo.getDesigner(dId);
-            WorkScheduleModel result = Newtonsoft.Json.JsonConvert.DeserializeObject<WorkScheduleModel>(System.IO.File.ReadAllText(d.WorkSchedules.First().Location));
-            ClosedDatesModel dresult = Newtonsoft.Json.JsonConvert.DeserializeObject<ClosedDatesModel>(System.IO.File.ReadAllText(d.WorkSchedules.First().ClosedDatesLocation));
+            WorkScheduleModel result = Newtonsoft.Json.JsonConvert.DeserializeObject<WorkScheduleModel>(System.IO.File.ReadAllText(HostingEnvironment.MapPath(d.WorkSchedules.First().Location)));
+            ClosedDatesModel dresult = Newtonsoft.Json.JsonConvert.DeserializeObject<ClosedDatesModel>(System.IO.File.ReadAllText(HostingEnvironment.MapPath(d.WorkSchedules.First().ClosedDatesLocation)));
             string responseStatus = "Failure";
             var times = new List<DateTime>();
             var bookDate = DateTime.Parse(date);
@@ -70,7 +87,6 @@ namespace natp.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public ActionResult SetAppointment(SetAppointmentViewModel model)
         {
             var aRepo = new AppointmentRepository(new npDataContext());
@@ -83,7 +99,8 @@ namespace natp.Controllers
             {
                 if (aRepo.canScheduleAppointmentForDesigner(model.DesignerId, utcTime))
                 {
-                    var apt = new Appointment() { ClientId = model.ClientId, Designerd = model.DesignerId, IsCanceled = false, IsConfirmed = false, DateCreatedUtc = DateTime.UtcNow, AppointmentTimeUtc = utcTime, TimeOffset = (decimal)model.Offset };
+                    var isConfirmed = (model.IsDesigner == 1) ? true: false;
+                    var apt = new Appointment() { ClientId = model.ClientId, Designerd = model.DesignerId, IsCanceled = false, IsConfirmed = isConfirmed, DateCreatedUtc = DateTime.UtcNow, AppointmentTimeUtc = utcTime, TimeOffset = (decimal)model.Offset };
                     var aId = aRepo.addAppointment(apt);
                     response = new BookTimesResponse() { Status = "Success" };
                 }
@@ -96,7 +113,6 @@ namespace natp.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult MakeComment(AppointmentCommentFormViewModel model)
         {
@@ -119,8 +135,8 @@ namespace natp.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Designer")]
         public ActionResult MakeNote(AppointmentNoteFormViewModel model)
         {
             var response = new BookTimesResponse();

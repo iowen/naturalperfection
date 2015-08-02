@@ -11,6 +11,11 @@ using Microsoft.Owin.Security;
 using natp.Models;
 using System.Data.SqlClient;
 using natp.DataRepos;
+using System.Threading;
+using natp.Utilities;
+using System.Net.Mail;
+using System.Net;
+using System.Collections.Generic;
 
 namespace natp.Controllers
 {
@@ -53,7 +58,6 @@ namespace natp.Controllers
                 _userManager = value;
             }
         }
-        [Authorize]
         public ActionResult Index()
         {
             if (User.IsInRole("Designer"))
@@ -62,16 +66,87 @@ namespace natp.Controllers
                 return RedirectToAction("Index", "Client");
             return RedirectToAction("Index", "Home");
         }
+
+
+        public ActionResult Edit(int id)
+        {
+            var aRepo = new AccountRepository(new npDataContext());
+            var a = aRepo.getAccount(id);
+            return PartialView("_Edit", a);
+
+        }
+
+        public ActionResult ChangePassword(int id)
+        {
+            var aRepo = new AccountRepository(new npDataContext());
+            var a = aRepo.getAccount(id);
+            return PartialView("_ChangePassword", a);
+
+        }
+
+        [HttpPost]
+        public ActionResult Update(AccountUpdateModel model)
+        {
+            var response = new AppResponse();
+            try
+            {
+                var aRepo = new AccountRepository(new npDataContext());
+                aRepo.updateAccountProfile(model.AccountId, model.FirstName, model.LastName);
+                response = new AppResponse() { Status = "Success" };
+                return new JsonResult() { Data = response };
+            }
+            catch (Exception e)
+            {
+                response = new AppResponse() { Status = "Failure", Errors = new List<string>() { e.Message } };
+                return new JsonResult() { Data = response };
+
+            }
+        }
+
+        [HttpPost]
+        public ActionResult UpdatePassword(AccountUpdatePasswordModel model)
+        {
+            var response = new AppResponse();
+            try
+            {
+                var valid = UserManager.ChangePassword(model.AccountId.ToString(), model.OldPassword, model.NewPassword);
+
+                if (valid.Succeeded)
+                {
+                    response = new AppResponse() { Status = "Success" };
+                }
+                else
+                    response = new AppResponse() { Status = "Failure", Errors = valid.Errors.ToList()};
+
+                return new JsonResult() { Data = response };
+            }
+            catch (Exception e)
+            {
+                response = new AppResponse() { Status = "Failure", Errors = new List<string>() { e.Message } };
+                return new JsonResult() { Data = response };
+
+            }
+        }
         //
         // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            var remember = "";
+            try
+            {
+                remember = Request.Cookies["NATP"]["remember"];
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                remember = "";
+            }
             if(string.IsNullOrWhiteSpace(returnUrl))
             {
                 returnUrl = "/Account/Index";
             }
             ViewBag.ReturnUrl = returnUrl;
+            ViewBag.rememberedEmail = remember;
             return View();
         }
 
@@ -87,20 +162,33 @@ namespace natp.Controllers
                 return View(model);
             }
             var aRepo = new AccountRepository(new npDataContext());
+            var a = UserManager.FindByEmail(model.Email);
             if (string.IsNullOrWhiteSpace(returnUrl))
             {
                 returnUrl = "/Account/Index";
             }
+            if (!await UserManager.IsEmailConfirmedAsync(a.Id))
+            {
+                ModelState.AddModelError("", "You need to confirm your email.");
+                return View(model);
+            }
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, false, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
                     {
-                        var a = UserManager.FindByEmail(model.Email);
+                        
                         HttpCookie cookie = Request.Cookies["NATP"] ??
                          new HttpCookie("NATP");
+                        if(model.RememberMe)
+                            cookie.Values["remember"] = model.Email;
+                        else if (cookie.Values["remember"] == model.Email)
+                        {
+                            cookie.Values["remember"] = "";
+                        }
+
                         cookie.Values["currentUserId"] = a.Id;
                         Response.Cookies.Add(cookie);
                         aRepo.setIsActive(int.Parse(a.Id), true);
@@ -178,36 +266,55 @@ namespace natp.Controllers
         {
             if (ModelState.IsValid)
             {
-
-                var context = new npDataContext();
-                var con = new SqlConnection(context.Connection.ConnectionString);
-                con.Open();
-                SqlCommand comm = new SqlCommand("SELECT IDENT_CURRENT ('dbo.Account')", con);
-                int lastValue = Convert.ToInt32(comm.ExecuteScalar());
-                int nextValue = lastValue + 1;
-                var dt = DateTime.UtcNow;
-                var user = new ApplicationUser { Id = nextValue.ToString(), UserName = model.Email, FirstName = model.FirstName, LastName = model.LastName, DateCreatedUtc = dt, DateLastUpdatedUtc = dt, PasswordHash = UserManager.PasswordHasher.HashPassword(model.Password), SecurityStamp = Guid.NewGuid().ToString() };
-                user.Email = model.Email;
-                var result = UserManager.Create(user);
-                UserManager.AddToRole(user.Id, "Client");
-                 var r = await UserManager.AddClaimAsync(user.Id, new Claim("Role", "Client"));
-                 var cRep = new ClientRepository(new npDataContext());
-                 var c = new Client() { AccountId = int.Parse(user.Id), DesignerId = 1 };
-                 cRep.addClient(c);
-
-                if (result.Succeeded)
+                var user = new ApplicationUser();
+                bool accountCreated = false;
+                if (Monitor.TryEnter(GlobalVariables.AccountRegisterLock, TimeSpan.FromSeconds(30)))
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    var context = new npDataContext();
+                    var con = new SqlConnection(context.Connection.ConnectionString);
+                    con.Open();
+                    SqlCommand comm = new SqlCommand("SELECT IDENT_CURRENT ('dbo.Account')", con);
+                    int lastValue = Convert.ToInt32(comm.ExecuteScalar());
+                    int nextValue = lastValue + 1;
+                    var dt = DateTime.UtcNow;
+                    user = new ApplicationUser { Id = nextValue.ToString(), UserName = model.Email, FirstName = model.FirstName, LastName = model.LastName, DateCreatedUtc = dt, DateLastUpdatedUtc = dt, PasswordHash = UserManager.PasswordHasher.HashPassword(model.Password), SecurityStamp = Guid.NewGuid().ToString() };
+                    user.Email = model.Email;
+                    var result = UserManager.Create(user);
+                    accountCreated = result.Succeeded;
+                    if (!accountCreated)
+                        AddErrors(result);
+                }
+                else return View(model);
+                if (accountCreated)
+                {
+                    if (Monitor.TryEnter(GlobalVariables.ClientRegisterLock, TimeSpan.FromSeconds(30)))
+                    {
+                        UserManager.AddToRole(user.Id, "Client");
+                        var r = await UserManager.AddClaimAsync(user.Id, new Claim("Role", "Client"));
+                        var cRep = new ClientRepository(new npDataContext());
+                        var c = new Client() { AccountId = int.Parse(user.Id), DesignerId = 1 };
+                        cRep.addClient(c);
+
+                    }
+                    else return View(model);
+
+                    //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-                    return RedirectToAction("Index", "Client");
+                    var aRepo = new AccountRepository(new npDataContext());
+                    var acc = aRepo.getAccount(int.Parse(user.Id));
+                    IdentityMessage email = new IdentityMessage();
+                   email.Body = EmailUtility.GenerateWelcomeEmail(acc, callbackUrl);
+                    email.Destination = acc.Email.Trim();
+                     email.Subject = "Welcome To Natural Perfection";
+                     await UserManager.EmailService.SendAsync(email);  
+                    return RedirectToAction("Index", "Home");
                 }
-                AddErrors(result);
+
             }
 
             // If we got this far, something failed, redisplay form
@@ -253,10 +360,15 @@ namespace natp.Controllers
 
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+               
+                IdentityMessage email = new IdentityMessage();
+                email.Body = EmailUtility.GenerateResetPasswordEmail(user.FirstName+" "+user.LastName, callbackUrl);
+                email.Destination = model.Email.Trim();
+                email.Subject = "Reset your Natural Perfection Password";
+                await UserManager.EmailService.SendAsync(email); 
+                return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
             // If we got this far, something failed, redisplay form

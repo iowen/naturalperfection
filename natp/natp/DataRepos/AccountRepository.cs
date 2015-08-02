@@ -73,6 +73,33 @@ namespace natp.DataRepos
             this.db.SubmitChanges();
             return account.AccountId;
         }
+        public bool updateAccountProfile(int id, string FirstName, string LastName)
+        {
+            Account account = this.getAccount(id);
+            if (account.AccountId > 0)
+            {
+                account.FirstName = FirstName;
+                account.LastName = LastName;
+                account.LastUpdatedBy = id;
+                account.DateLastUpdatedUtc = DateTime.UtcNow;
+                this.db.SubmitChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public bool updateAccountPassword(int id,  string NewPassword)
+        {
+            Account account = this.getAccount(id);
+            if (account.AccountId > 0 )
+            {
+                account.PasswordHash = NewPassword;
+                account.DateLastUpdatedUtc = DateTime.UtcNow;
+                this.db.SubmitChanges();
+                return true;
+            }
+            return false;
+        }
         public bool updateAccount(int id, string email, string pwd)
         {
             Account account = this.getAccount(id);

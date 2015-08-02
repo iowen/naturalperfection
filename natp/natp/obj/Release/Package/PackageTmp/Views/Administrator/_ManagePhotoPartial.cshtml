@@ -1,0 +1,204 @@
+﻿
+<script type="text/javascript">
+
+    var itemCount = 0;
+    var totalCount = 0;
+    </script>
+
+    <div class="twelve columns">
+        <a href="javascript:void(0)" onclick="showAddPhoto();">Upload Photos</a>
+    </div>
+        <div class="twelve columns">
+            <h3>PhotoAlbums</h3>
+            <div class="row services">
+
+
+                <table id="example" class="display" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th style="display:none"></th>
+                            <th></th>
+                            <th>Date</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Featured</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                        foreach (var p in ViewBag.photoAlbums)
+                        {
+                            <tr>
+                               <td style="display:none">@p.PhotoAlbumId</td>
+                                <td><img src="@p.PhotoAlbumItems[0].Photo.Location" width="100" height="100"></td>
+                                    <td>@p.DateCreatedUtc.ToLocalTime().ToString("MMMM dd, yyyy h:mm tt")</td>
+                                    <td>@p.Title</td>
+                                <td>@p.Description</td>
+                                <td>@p.IsFeatured.ToString()</td>
+                                </tr>
+                        }
+                    }
+                    </tbody>
+                </table>
+                <script type="text/javascript" language="javascript">
+
+
+
+                    $('#example').dataTable({
+                        columnDefs: [{
+                            targets: [2],
+                            orderData: [2, 3]
+                        }, {
+                            targets: [3],
+                            orderData: [3, 2]
+                        }]
+                    });
+                    $('#example tbody').on('click', 'tr', function () {
+                        var name = $('td', this).eq(0).text();
+                        alert('You clicked on ' + name + '\'s row');
+                    });
+
+</script>
+
+
+
+        </div>
+
+    </div>
+
+
+<script>
+    function getUploadedItem(location, title, data) {
+        var output = "";
+        if (itemCount == 0) {
+            if (data.length == 0) {
+                output = '<ul class="inline-list" style="padding:3px;"><li  data-rel="festival" >'
+                    + '<input type="hidden" class="uItem" id="item' + totalCount + '" value="' + location + ',' + title + '"/>'
+                    + ' <!-- Image -->'
+                   + ' <div class="image" style="width:100%">'
+                      + '  <img src="' + location + '" alt="img" width="120" height="120">'
+                      + '  <a href="photo_open.html" class="color1">'
+                       + '     <div class="hover color2b">'
+                            + '    <span class="font72px"></span>'
+                            + '</div>'
+                        + '</a>'
+                   + ' </div>'
+                  + '  <span class="color5" style="clear:both">' + title + '</span>'
+               + ' </li></ul>';
+            }
+            else {
+                output = data + '<ul class="inline-list" ><li   data-rel="festival">'
+                                          + '<input type="hidden" class="uItem" id="item' + totalCount + '" value="' + location + ',' + title + '"/>'
+   + ' <!-- Image -->'
+   + ' <div class="image" style="width:100%" >'
+      + '  <img src="' + location + '" alt="img" width="120" height="120">'
+      + '  <a href="video_open.html" class="color1">'
+       + '     <div class="hover color2b">'
+            + '    <span class="font72px">D</span>'
+            + '</div>'
+        + '</a>'
+   + ' </div>'
+  + '  <span class="color5" style="clear:both">' + title + '</span>'
++ ' </li></ul>';
+            }
+            ++itemCount;
+            ++totalCount;
+        }
+        else if (itemCount <= 5) {
+            data = data.substring(0, data.length - 5);
+            output = data + '<li   data-rel="festival">'
+                                      + '<input type="hidden" class="uItem" id="item' + totalCount + '" value="' + location + ',' + title + '"/>'
+                           + ' <!-- Image -->'
+                           + ' <div class="image" style="width:100%">'
+                              + '  <img src="' + location + '" alt="img" width="120" height="120">'
+                              + '  <a href="video_open.html" class="color1">'
+                               + '     <div class="hover color2b">'
+                                    + '    <span class="font72px">D</span>'
+                                    + '</div>'
+                                + '</a>'
+                           + ' </div>'
+                          + '  <span class="color5" style="clear:both">' + title + '</span>'
+                       + ' </li></ul>';
+
+            if (itemCount <= 4)
+                ++itemCount;
+            else
+                itemCount = 0;
+            ++totalCount;
+
+        }
+
+        return output;
+    }
+</script>
+<script>
+    function afterUpload(location, title) {
+        var data = document.getElementById("uploadedItems").innerHTML;
+        var output = getUploadedItem(location, title, data);
+        document.getElementById("uploadedItems").innerHTML = output;
+        document.getElementById("uploadedItems").style.display = "block";
+
+    }
+
+    function saveUploadedAlbum() {
+        isSaved = true;
+        var output = "";
+        var meta = ""
+        var dat = $('#uploadedItems').html();
+        //    $('#uploadedItems').html("");
+        $('.uItem').each(function () {
+            var content = $(this).val();
+            //     alert(content);
+            var result = content.split(",");
+            output += result[0] + "," + result[1] + ";";
+        });
+        meta = $('#albumTitle').val() + "~" + $('#albumDescription').val()+ "~" +"site";
+        // $('#uploadedItems').html(dat);
+        $.post('@Url.Action("Processalbum", "Photo")', { meta: meta, uploads: output }, function (data) {
+            closeModal();
+            GetMenuDashboard('photo');
+        });
+    }
+
+    function showAddPhoto() {
+        document.getElementById("contentt").innerHTML = '<p style="padding-bottom:1em;">Click the browse button to select photos to upload.</p>' +
+    '<div class="twelve columns">' +
+        '<div class="four columns">' +
+        '<a id="submitAlbum" href="javascript:void(0);" class="default_button color1 color4b font1 color_hover1b" onClick="saveUploadedAlbum();">Save Album</a>' +
+'<div id="albumData" style="width:100%">' +
+ '        <div class="line color1b"></div>' +
+  '      <label>Album Title: </label><input id="albumTitle" /><br />' +
+   '     <label>Album Description: </label> <textarea id="albumDescription"></textarea>' +
+   ' <br />' +
+    
+'</div>' +
+        ' <div style="display:inline"><input type="file" name="file_upload" id="file_upload" /></div>' +
+
+        '</div>' +
+        '<div class="eight columns">' +
+        '<div id="uploadedItems" style="display:none;">' +
+        '</div>' +
+            '  </div>' +
+            '</div>';
+        $('#file_upload').uploadify({
+            'swf': '\\Content\\Uploadify\\uploadify.swf',
+            'uploader': '@Url.Action("HandleUpload", "Photo", new { })',
+            'multi': 'true',
+            'buttonText': 'Browse Images',
+            'fileTypeDesc': 'Image Files',
+            'fileTypeExts': '*.gif; *.jpg; *.jpeg; *.png',
+            'onUploadSuccess': function (file, data, response) {
+                var item = eval(data);
+                if ((item.length / 2) == 1) {
+                    var dta = item[0].replace(/[\\*]/g, "/");
+
+                    var l = dta.split("npMedia");
+                    var loc = "/npMedia" + l[1];
+                    afterUpload(loc, item[1]);
+                }
+            }
+        });
+        showModal();
+    }
+</script>

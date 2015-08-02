@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using System.Web.Hosting;
 
 namespace natp.Controllers
 {
@@ -17,10 +18,12 @@ namespace natp.Controllers
         public ActionResult Index()
         {
            // int dId = 1;
+            var offset = TimeZone.CurrentTimeZone.GetUtcOffset(Request.RequestContext.HttpContext.Timestamp);
+
             var dRepo = new DesignerRepository(new npDataContext());
             var d = dRepo.getDesignerByAccount(int.Parse((User.Identity.GetUserId())));
-            dynamic result = Newtonsoft.Json.JsonConvert.DeserializeObject<WorkScheduleModel>(System.IO.File.ReadAllText(d.WorkSchedules.First().Location));
-            dynamic dresult = Newtonsoft.Json.JsonConvert.DeserializeObject<ClosedDatesModel>(System.IO.File.ReadAllText(d.WorkSchedules.First().ClosedDatesLocation));
+            dynamic result = Newtonsoft.Json.JsonConvert.DeserializeObject<WorkScheduleModel>(System.IO.File.ReadAllText(HostingEnvironment.MapPath(d.WorkSchedules.First().Location)));
+            dynamic dresult = Newtonsoft.Json.JsonConvert.DeserializeObject<ClosedDatesModel>(System.IO.File.ReadAllText(HostingEnvironment.MapPath(d.WorkSchedules.First().ClosedDatesLocation)));
             ViewBag.upcomingAppointments = d.Appointments.Where<Appointment>(s => s.AppointmentTimeUtc > DateTime.UtcNow && s.IsConfirmed == true && s.IsCanceled == false).ToList();
             ViewBag.todaysAppointments = d.Appointments.Where<Appointment>(s => s.AppointmentTimeUtc.Date == DateTime.UtcNow.Date && s.IsConfirmed == true && s.IsCanceled == false).ToList();
             ViewBag.pendingAppointments = d.Appointments.Where<Appointment>(s => s.AppointmentTimeUtc > DateTime.UtcNow && s.IsConfirmed == false && s.IsCanceled == false).ToList();
@@ -28,7 +31,7 @@ namespace natp.Controllers
             List<Appointment> ah = d.Appointments.Where<Appointment>(s => s.IsConfirmed == true && s.IsCanceled == false).ToList();
              foreach (var i in ah)
              {
-                 sm.Schedule.Add(new ScheduleItemModel() { title = i.Client.Account.FirstName + " " + i.Client.Account.LastName, start = i.AppointmentTimeUtc.ToString("yyyy-MM-dd") + "T" + i.AppointmentTimeUtc.ToString("HH:mm:ss"), end = i.AppointmentTimeUtc.ToString("yyyy-MM-dd") + "T" + i.AppointmentTimeUtc.AddMinutes(20).ToString("HH:mm:ss") , aId = i.AppointmentId});
+                 sm.Schedule.Add(new ScheduleItemModel() { title = i.Client.Account.FirstName + " " + i.Client.Account.LastName, start = i.AppointmentTimeUtc.Add(offset).ToString("yyyy-MM-dd") + "T" + i.AppointmentTimeUtc.Add(offset).ToString("HH:mm:ss"), end = i.AppointmentTimeUtc.Add(offset).ToString("yyyy-MM-dd") + "T" + i.AppointmentTimeUtc.Add(offset).AddMinutes(20).ToString("HH:mm:ss"), aId = i.AppointmentId });
              }
              foreach (var cd in dresult.closedDates)
              {
@@ -48,8 +51,8 @@ namespace natp.Controllers
              // int dId = 1;
              var dRepo = new DesignerRepository(new npDataContext());
              var d = dRepo.getDesignerByAccount(int.Parse((User.Identity.GetUserId())));
-             WorkScheduleModel result = Newtonsoft.Json.JsonConvert.DeserializeObject<WorkScheduleModel>(System.IO.File.ReadAllText(d.WorkSchedules.First().Location));
-             dynamic dresult = Newtonsoft.Json.JsonConvert.DeserializeObject<ClosedDatesModel>(System.IO.File.ReadAllText(d.WorkSchedules.First().ClosedDatesLocation));
+             WorkScheduleModel result = Newtonsoft.Json.JsonConvert.DeserializeObject<WorkScheduleModel>(System.IO.File.ReadAllText(HostingEnvironment.MapPath(d.WorkSchedules.First().Location)));
+             dynamic dresult = Newtonsoft.Json.JsonConvert.DeserializeObject<ClosedDatesModel>(System.IO.File.ReadAllText(HostingEnvironment.MapPath(d.WorkSchedules.First().ClosedDatesLocation)));
              ViewBag.closedDates = dresult.closedDates;
 
              ViewBag.workScheduleModel = result;
@@ -85,8 +88,8 @@ namespace natp.Controllers
              // int dId = 1;
              var dRepo = new DesignerRepository(new npDataContext());
              var d = dRepo.getDesignerByAccount(int.Parse((User.Identity.GetUserId())));
-             WorkScheduleModel result = Newtonsoft.Json.JsonConvert.DeserializeObject<WorkScheduleModel>(System.IO.File.ReadAllText(d.WorkSchedules.First().Location));
-             ClosedDatesModel dresult = Newtonsoft.Json.JsonConvert.DeserializeObject<ClosedDatesModel>(System.IO.File.ReadAllText(d.WorkSchedules.First().ClosedDatesLocation));
+             WorkScheduleModel result = Newtonsoft.Json.JsonConvert.DeserializeObject<WorkScheduleModel>(System.IO.File.ReadAllText(HostingEnvironment.MapPath(d.WorkSchedules.First().Location)));
+             ClosedDatesModel dresult = Newtonsoft.Json.JsonConvert.DeserializeObject<ClosedDatesModel>(System.IO.File.ReadAllText(HostingEnvironment.MapPath(d.WorkSchedules.First().ClosedDatesLocation)));
              var closedDates = dresult.closedDates.Where(cd => cd > DateTime.Now).ToList();
              ViewBag.closedDates = closedDates;
              string serializedClosedDates = Newtonsoft.Json.JsonConvert.SerializeObject(closedDates);
@@ -97,7 +100,6 @@ namespace natp.Controllers
          }
 
          [HttpPost]
-         [AllowAnonymous]
          public ActionResult ConfirmAppointment(AppointmentViewModel model)
          {
              var aRepo = new AppointmentRepository(new npDataContext());
@@ -111,7 +113,6 @@ namespace natp.Controllers
          }
 
          [HttpPost]
-         [AllowAnonymous]
          public ActionResult CancelAppointment(AppointmentViewModel model)
          {
              var aRepo = new AppointmentRepository(new npDataContext());
@@ -123,7 +124,6 @@ namespace natp.Controllers
          }
 
          [HttpPost]
-         [AllowAnonymous]
          public ActionResult RejectAppointment(AppointmentViewModel model)
          {
              var aRepo = new AppointmentRepository(new npDataContext());
@@ -136,12 +136,11 @@ namespace natp.Controllers
          }
 
          [HttpPost]
-         [AllowAnonymous]
          public ActionResult SetSchedule(SetScheduleViewModel model)
          {
              var dRepo = new DesignerRepository(new npDataContext());
              var d = dRepo.getDesignerByAccount(int.Parse((User.Identity.GetUserId())));
-             WorkScheduleModel result = Newtonsoft.Json.JsonConvert.DeserializeObject<WorkScheduleModel>(System.IO.File.ReadAllText(d.WorkSchedules.First().Location));
+             WorkScheduleModel result = Newtonsoft.Json.JsonConvert.DeserializeObject<WorkScheduleModel>(System.IO.File.ReadAllText(HostingEnvironment.MapPath(d.WorkSchedules.First().Location)));
              WorkScheduleModel schedule = new WorkScheduleModel();
              var hours = GenerateHours(model);
              var days = model.Days.Split(new string[]{";"}, StringSplitOptions.RemoveEmptyEntries);
@@ -164,13 +163,12 @@ namespace natp.Controllers
                      schedule.sat = hours;
              }
              var scheduleJson = Newtonsoft.Json.JsonConvert.SerializeObject(schedule);
-             System.IO.File.WriteAllText(d.WorkSchedules.First().Location, scheduleJson);
+             System.IO.File.WriteAllText(HostingEnvironment.MapPath(d.WorkSchedules.First().Location), scheduleJson);
              var responseStatus =  "Success" ;
              var response = new BookTimesResponse() { Status = responseStatus };
              return new JsonResult() { Data = response };
          }
          [HttpPost]
-         [AllowAnonymous]
          public ActionResult CanClose (string DateToClose)
          {
              var dt = DateTime.Parse(DateToClose.Split(new []{'-'}).Last());
@@ -183,7 +181,6 @@ namespace natp.Controllers
          }
 
          [HttpPost]
-         [AllowAnonymous]
          public ActionResult SetCloseDates(string DatesToClose)
          {
              var responseStatus =  "Failure";
@@ -202,7 +199,7 @@ namespace natp.Controllers
            //  var a = d.Appointments.Any(app => app.AppointmentTimeUtc.Date == dt.Date);
              var closedJson = Newtonsoft.Json.JsonConvert.SerializeObject(cDates);
 
-             System.IO.File.WriteAllText(d.WorkSchedules.First().ClosedDatesLocation, closedJson);
+             System.IO.File.WriteAllText(HostingEnvironment.MapPath(d.WorkSchedules.First().ClosedDatesLocation), closedJson);
              responseStatus =  "Success";
              }
              catch(Exception e)

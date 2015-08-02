@@ -11,6 +11,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using natp.Models;
+using System.Net.Mail;
+using System.Net;
 
 namespace natp
 {
@@ -18,8 +20,19 @@ namespace natp
     {
         public Task SendAsync(IdentityMessage message)
         {
+            string fromPassword = "10f14lif3";
+            SmtpClient client = new SmtpClient();
+            MailMessage mail = new MailMessage("admin@tricarewellness.com", message.Destination);
+                    client.Port = 80;
+                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    client.UseDefaultCredentials = false;
+                    client.Credentials = new NetworkCredential("admin@tricarewellness.com", fromPassword);
+                    client.Host = "smtpout.secureserver.net";
+                    mail.Subject = message.Subject;
+                    mail.IsBodyHtml = true;
+                    mail.Body = message.Body;                         
             // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            return client.SendMailAsync(mail);
         }
     }
 

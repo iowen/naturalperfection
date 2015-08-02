@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 namespace natp.Controllers
 {
+    [Authorize(Roles = "SuperAdmin")]
     public class PhotoController : Controller
     {
         // GET: Photo
@@ -18,6 +19,7 @@ namespace natp.Controllers
             ViewBag.albums = pAlb.getAllPhotoAlbums();
             return View();
         }
+        [AllowAnonymous]
         public ActionResult Album(int id)
         {
             var pAlb = new PhotoAlbumRepository(new npDataContext());

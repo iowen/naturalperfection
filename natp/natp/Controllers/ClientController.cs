@@ -8,11 +8,11 @@ using natp.DataRepos;
 
 namespace natp.Controllers
 {
-    [Authorize(Roles = "SuperAdmin, Client")]
+    [Authorize]
     public class ClientController : Controller
     {
         // GET: Client
-    
+     [Authorize(Roles = "SuperAdmin, Client")]
         public ActionResult Index()
         {
             var cRep = new ClientRepository(new npDataContext());
@@ -37,6 +37,7 @@ namespace natp.Controllers
         }
 
         // GET: Client
+         [Authorize(Roles = "SuperAdmin, Designer")]
         public ActionResult View(int id)
         {
             var cRepo = new ClientRepository(new npDataContext());
@@ -48,5 +49,6 @@ namespace natp.Controllers
             ViewBag.client = c;
             return View();
         }
+
     }
 }

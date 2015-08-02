@@ -1,0 +1,217 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<!-- Region 3 Wrap -->
+
+<div class="container region3wrap">
+
+
+    <!-- Main Slider -->
+    <div class="row">
+
+        <!-- Camera Slider -->
+        <div class="fluid_container">
+
+            <div class="camera_wrap" id="camera_wrap_1">
+                <div data-thumb="/Images/images/sliders/camera/thumbs/hair_thumb.jpg" data-src="/Images/images/sliders/camera/hair.jpg">
+                    <div class="camera_caption fadeFromBottom">
+                        Avoid the hassle. <em>Book appointments online.</em>
+                    </div>
+                </div>
+
+                <div data-thumb="/Images/images/sliders/camera/thumbs/products_thumb.jpg" data-src="/Images/images/sliders/camera/products.jpg">
+                    <div class="camera_caption fadeFromBottom">
+                        Our Product line is coming soon. <em> Made to keep you naturally beautiful.</em>
+                    </div>
+                </div>
+
+                <div data-thumb="/Images/images/sliders/camera/thumbs/salonblackhair_thumb.jpg" data-src="/Images/images/sliders/camera/salonblackhair.jpg">
+                    <div class="camera_caption fadeFromBottom">
+                        <em>Contact us for group appointments</em> (such as weddings and prom)
+                    </div>
+                </div>
+
+               
+            </div>
+
+        </div>
+        <!-- End Camera Slider -->
+
+    </div>
+    <!-- End Main Slider -->
+    <!-- Content Top -->
+    <div class="row content_top">
+
+
+
+        <div class="twelve columns">
+
+            <h2>Simply Amazing.</h2>
+
+        </div>
+
+
+
+    </div>
+    <!-- End Content Top -->
+
+</div>
+
+<!-- End Region 3 Wrap -->
+<!-- Region 4 Wrap -->
+
+<div class="container region4wrap">
+
+    <div class="row maincontent">
+
+        <!-- Main Content ( Middle Content) -->
+
+        <div class="twelve columns">
+
+            <!-- Services -->
+            <div class="row">
+
+                <!-- // // // // // // // // // // -->
+
+                <div class="four columns">
+
+                    <div class="service">
+                        <a href="javascript:void(0)">
+                            <div class="service-icon"><img src="~/Images/images/icons/appointment_icon_white.png" width="120" height="60" alt="Modern"></div>
+                            <h2 class="service-main">Book Appointments</h2>
+                            <p class="service-sub">Register with us to take advantage of booking appointments online.</p>
+                        </a>
+                    </div>
+
+                </div>
+
+                <!-- // // // // // // // // // // -->
+
+                <div class="four columns">
+
+                    <div class="service">
+                        <a href="javascript:void(0)">
+                            <div class="service-icon"><img src="~/Images/images/icons/cart-15-xxl.png" width="120" height="60" alt="Modern"></div>
+                            <h2 class="service-main">Products Coming Soon</h2>
+                            <p class="service-sub">Our product line will be available soon.</p>
+                        </a>
+                    </div>
+
+                </div>
+
+                <!-- // // // // // // // // // // -->
+
+                <div class="four columns">
+
+                    <div class="service">
+                        <a href="javascript:void(0)">
+                            <div class="service-icon"><img src="~/Images/images/icons/video.png" width="120" height="60" alt="Modern"></div>
+                            <h2 class="service-main">Tutorials Coming Soon</h2>
+                            <p class="service-sub">We will be adding tutorials to educate users on best practices for maintiaing their hair.</p>
+                        </a>
+                    </div>
+
+                </div>
+
+                <!-- // // // // // // // // // // -->
+
+            </div>
+            <!-- End Services -->
+
+            <div class="row">
+                <div class="twelve columns">
+                    <hr />
+                </div>
+            </div>
+
+            <!-- Recent Work -->
+            <div class="row">
+
+                <div class="twelve columns">
+
+                    <h3>Recent Uploads</h3>
+
+                    <!-- // // // // // // // // // // -->
+                    <div class="list_carousel">
+                        <div class="carousel_nav">
+                            <a class="prev" id="car_prev" href="#"><span>prev</span></a>
+                            <a class="next" id="car_next" href="#"><span>next</span></a>
+                        </div>
+                        <div class="clearfix"></div>
+                        <ul id="carousel-works">
+                            @{
+                                foreach (var i in ViewBag.featuredPhotoAlbums)
+                                {
+                                    <li>
+                                        <div class="work-item contentHover">
+
+                                            <div class="content">
+                                                <div class="work-item-image">
+                                                    <img src="@i.PhotoAlbumItems[0].Photo.Location" alt="" style="height:225px; width:225px;" />
+                                                </div>
+
+                                                <div class="work-item-content">
+                                                    <h4><a href="/Photo/Album/@i.PhotoAlbumId">@i.Title</a></h4>
+                                                    <p>@i.Description</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="hover-content">
+                                                <h3><a href="/Photo/Album/@i.PhotoAlbumId">@i.Title</a></h3>
+                                                <p>@i.Description</p>
+                                                <div class="hover-links">
+                                                    <a href="/Photo/Album/@i.PhotoAlbumId" class="view-item"><span>&nbsp;</span></a>
+                                                    <a class="titan-lb view-image" href="@i.PhotoAlbumItems[0].Photo.Location" title="@i.Title"><span>&nbsp;</span></a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </li>
+
+                                }
+                            }
+                           
+
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <!-- // // // // // // // // // // -->
+
+                </div>
+
+            </div>
+            <!-- End Recent Work -->
+
+            @*<div class="row">
+                <div class="twelve columns">
+                    <hr />
+                </div>
+            </div>*@
+
+            @*<!-- Our Partners -->
+            <div class="row">
+
+                <div class="twelve columns">
+
+                    <h3>Our Partners</h3>
+
+                    <ul class="clients_list">
+                        <li class="three"><a class="has-tipsy" href="#" title="Site Templates and Themes"><img src="Images/images/logos/1.png" alt="Apple"></a></li>
+                        <li class="three"><a class="has-tipsy" href="#" title="Awesome Stock Graphics"><img src="Images/images/logos/2.png" alt="EA"></a></li>
+                        <li class="three"><a class="has-tipsy" href="#" title="PHP, JS, Java and .NET"><img src="Images/images/logos/3.png" alt="Adidas"></a></li>
+                        <li class="three"><a class="has-tipsy" href="#" title="Stock Motion Graphics"><img src="Images/images/logos/4.png" alt="NASA"></a></li>
+                    </ul>
+
+                </div>
+
+            </div>
+            <!-- End Our Partners -->*@
+
+        </div>
+        <!-- End Main Content ( Middle Content) -->
+
+    </div>
+</div>
+
+<!-- End Region 4 Wrap -->

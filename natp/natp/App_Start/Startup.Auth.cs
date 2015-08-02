@@ -50,7 +50,9 @@ namespace natp
                         ctx.Response.Redirect("/Home");
 
                     },
-                }
+
+                },
+                ExpireTimeSpan = TimeSpan.FromMinutes(10)
             });            
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
